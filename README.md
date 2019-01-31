@@ -2,142 +2,149 @@
 
 # Okta Secure Storage Library
 
-This library is a Swift wrapper around the iOS CommonCrypto, LocalAuthentication and Security frameworks. Library provides convenient API to utilize keychain services by giving your app a mechanism to store small bits of user data in an encrypted database. The keychain is not limited to passwords and tokens. You can store other secrets that the user explicitly cares about, such as credit card information or even short notes.
+This library is a Swift wrapper around the iOS LocalAuthentication and Security frameworks. The library provides convenient APIs to utilize keychain services by giving your app a mechanism to store small bits of user data in an encrypted database. The keychain is not limited to passwords and tokens. You can store other secrets that the user explicitly cares about, such as credit card information or even short notes.
 
-Library supports 3 different ways how to store data in keychain:
-1. Store data to keychain
-2. Store to keychain data that is further encrypted with AES256 encryption algorithm. Encryption key is provided by the developer via API
-3. Store to keychain behind a biometric factor such as fingerprint or face ID
+The storage library includes the following features:
+1. Get, set and delete keychain items
+2. Store to the keychain behind a biometric factor such as fingerprint or face ID
 
-Configuration parameters:
-1. AccountId - optional account name
-2. GroupdId - optional access group. Two or more apps that are in the same group can share keychain items because thet share a common keychain access group entitlement. For more details, see [Sharing Access to Keychain Items Among a Collection of Apps](https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps)
 
 **Table of Contents**
 
 <!-- TOC depthFrom:2 depthTo:3 -->
 
-- [Getting Started](#getting-started)
-- [Create instance of OktaSecureStorageManager](#create-instance-of-oktasecurestoragemanager)
+- [Usage](#usage)
+- [Create instance of OktaSecureStorage class](#create-instance-of-oktasecurestorage-class)
 - [Save data to keychain](#save-data-to-keychain)
+- [Save data to keychain behind a biometric factor](#save-data-to-keychain-behind-a-biometric-factor)
 - [Load data from keychain](#load-data-from-keychain)
+- [Delete data from keychain](#delete-data-from-keychain)
+- [Error handling](#error-handling)
 - [API Reference](#api-reference)
-- [save(data: String!)](#save-data)
-- [save(data: String!, withPassCodePin passCodePin: String!)](#save-data-with-passcodepin)
-- [storedData](#storeddata)
-- [storedDataWithPassCodePin(pin: String)](#storeddatawithpasscodepin)
-- [storedDataWithPrompt(userPrompt: String)](#storeddatawithprompt)
-- [isDataStored](#isdatastored)
-- [isSupportedOnTheDevice](#issupportedonthedevice)
-- [deleteData](#deletedata)
-- [How to use this libary in Objective-C project](#how-to-use-this-libary-in-objective-c-project])
+- [How to use this libary in Objective-C project](#how-to-use-this-libary-in-objective-c-project)
 
 <!-- /TOC -->
 
-## Getting Started
+## Usage
 
-### Create instance of OktaSecureStorageManager
+Add `import OktaSecureStorage` to your source code
 
-It is really easy to start using library. Find OktaSecureStorageManager class and call factory method secureStorageManager with the following parameters:
-- type - secure storage manager type. Could be one of the following: plainText, encryption or biometrics
-- accountId - optional account name 
-- groupId - optional group id
-
+### Create instance of OktaSecureStorage class
 
 ```swift
-let storageManager = OktaSecureStorageManager.secureStorageManager(type: .plainText, accountId: "jdoe", groupId: "com.mycompany.sharedkeychain")
+let oktaStorage = OktaSecureStorage()
 ```
 
 ### Save data to keychain
 
 ```swift
-storageManager.save(data: "Token Data")
+let success = oktaStorage.set(data: "password", forKey: "jdoe")
+```
+
+### Save data to keychain behind a biometric factor
+
+```swift
+let success = oktaStorage.set(data: "password", forKey: "jdoe" accessGroup: nil, behindBiometrics: true)
 ```
 
 ### Load data from keychain
 
 ```swift
-let token = storageManager.storedData()
+let password = oktaStorage.get("jdoe")
+```
+
+### Delete data from keychain
+
+```swift
+let success = oktaStorage.delete("jdoe")
+```
+
+### Error handling
+
+To get a specific failure reason use the lastResultCode property containing result code for the last operation. Please see [Keychain Result Codes](https://developer.apple.com/documentation/security/1542001-security_framework_result_codes)
+
+```swift
+if oktaStorage.set("password", forKey: "jdoe") {
+    // Data successfully saved
+} else {
+    // Check OSStatus error code
+    let error = oktaStorage.lastResultCode
+    // Error handling
+}
 ```
 
 ## API Reference
 
-### save(data: String!)
+### set(data: String, forKey key: String) -> Bool
 
-Saves data without using pin. Function returns reference to the stored data. Function will return nil if the storage type doesn’t support storage without pin.
-
-```swift
-let storedData = storageManager.save(data: “Data to store”)
-```
-
-### save(data: String!, withPassCodePin passCodePin: String!)
-
-Saves data using passcode pin. In case if the pin is not required by the storage manager pin parameter will be ignored. Function returns reference to the stored data.
+Stores an item securely in the keychain. Method returns true on success and false on error.
 
 ```swift
-let storedData = storageManager.save(data: “Data to store””, withPassCodePin: “Encryption Key”)
+let success = oktaStorage.set(data: "password", forKey: "jdoe")
 ```
 
-### storedData
+### set(data: String, forKey key: String, accessGroup: String? = nil) -> Bool
 
-Returns stored data without using passcode pin. Returns nil if not stored or requires a pin to read encrypted data based on type of storage.
-> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action
+Stores an item securely and additionaly accepts `accessGroup` identifier. Use `accessGroup` to share keychain items between apps. Two or more apps that are in the same group can share keychain items because they share a common keychain access group entitlement. For more details, see [Sharing Access to Keychain Items Among a Collection of Apps](https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps)
 
 ```swift
-let token = storageManager.storedData()
+let success = oktaStorage.set(data: "password", forKey: "jdoe", accessGroup: "com.mycompany.sharedkeychain")
 ```
 
-### storedDataWithPassCodePin(pin: String)
+### set(data: String, forKey key: String, accessGroup: String? = nil, behindBiometrics: Bool = false) -> Bool
 
-Returns stored data using passcode pin. In case if the pin is not required by storage manager pin parameter will be ignored.
-> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action
+Stores an item securely and additionaly accepts `behindBiometrics` parameter. Set this parameter to `true` if you want to store keychain item behind a biometric factor such as fingerprint or face ID.
 
 ```swift
-let token = storageManager.storedDataWithPassCodePin(pin: “1234”)
+let success = oktaStorage.set(data: "password", forKey: "jdoe" accessGroup: nil, behindBiometrics: true)
 ```
 
-### storedDataWithPrompt(userPrompt: String)
+### get(key: String) -> String?
 
-Returns stored data without using passcode pin. Method expects user prompt message based on device type and support. Returns nil if not stored or requires a pin to read encrypted data based on type of storage
-> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action
+Retrieves the stored keychain item from the keychain.
+> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action.
 
 ```swift
-let token = storageManager.storedDataWithPrompt(userPrompt: “Please use Touch ID to sign in”)
+let password = oktaStorage.get("jdoe")
 ```
 
-### isDataStored
+### get(userPrompt prompt: String = "", key: String) -> String?
 
-Checks if token is stored using concrete instance of storage manager. Returns true if token is stored:
+Retrieves the stored keychain item from the keychain. Additionaly method expects `userPrompt` message for the keychain item stored behind a biometric factor. 
+> * Note: iOS shows default system message If `userPrompt` parameter is emty.
+> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action.
 
 ```swift
-let isTokenStored = storageManager.isDataStored()
+let password = oktaStorage.get(userPrompt: “Please use Touch ID or Face ID to sign in” key: "jdoe")
 ```
 
-### isSupportedOnTheDevice
+### delete(key: String) -> Bool
 
-Checks whether created OktaSecureStorageManager instance can be used on the current device. Returns true if the OktaSecureStorageManager is supported on the device. OktaSecureStorageManager of type biometrics can return false if Touch ID and Face ID are not available on the device
+Removes the stored keychain item from the keychain
 
 ```swift
-let isSupported = storageManager.isSupportedOnTheDevice()
+let success = oktaStorage.delete("jdoe")
 ```
 
-### deleteData
+### isBiometricsSupported
 
-Deletes data from secure storage. If data is deleted returns true. If data does not exist returns false
+Checks whether fingerprint enrolled with Touch ID or a face set up with Face ID. This method allows easy checking for such conditions.
 
 ```swift
-let result = storageManager.deleteData()
+let isBiometricsSupported = storageManager.isBiometricsSupported()
 ```
 
-## How to use this libary in Objective-C project:
+
+## How to use this libary in Objective-C project
 1. Include auto generated swift header file into your .m file. Swift header file contains objective-c representation of Okta swift classes. Please note that the name of header file consists of your project name and “-Swift” suffix. For example if your project name is AuthApp, then auto generated header file name will be “AuthApp-Swift.h”
 2. Start using programming components available in swift header file
 
 Example:
 ```objective-c
-OktaSecureStorageManager *manager = [OktaSecureStorageManager secureStorageManagerWithType:OktaStorageManagerTypeEncryption
-                                                                                 accountId:@“jdoe”
-                                                                                   groupId:@"com.mycompany.sharedkeychain"];
-[manager saveData:@"Access Token" withPassCodePin:@"Encryption Key"]; 
-NSString *token = [manager storedTokenWithPassCodePin:@"Encryption Key"];
+OktaSecureStorage *storage = [OktaSecureStorage new];
+BOOL success = [storage setWithData:@"password" forKey:@"jdoe"];
+if (success) {
+    NSString *password = [storage getWithKey:@"jdoe"];
+    success = [storage deleteWithKey:@"jdoe"];
+}
 ```
