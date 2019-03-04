@@ -87,15 +87,19 @@ let success = oktaStorage.set(data: "password", forKey: "jdoe")
 Stores an item securely and additionally accepts `accessGroup` identifier. Use `accessGroup` to share keychain items between apps. Two or more apps that are in the same group can share keychain items because they share a common keychain access group entitlement. For more details, see [Sharing Access to Keychain Items Among a Collection of Apps](https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps)
 
 ```swift
-let success = oktaStorage.set(data: "password", forKey: "jdoe", accessGroup: "com.mycompany.sharedkeychain")
+let success = oktaStorage.set(data: "password",
+                              forKey: "jdoe",
+                              accessGroup: "com.mycompany.sharedkeychain")
 ```
 
 ### set(data: String, forKey key: String, accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) throws
 
-Stores an item securely and additionally accepts `accessibility` key. Parameter `accessibility` indicates when your app needs access to the data in a keychain item. Possible values are listed [here](https://developer.apple.com/documentation/security/keychain_services/keychain_items/item_attribute_keys_and_values#1679100)
+Stores an item securely and additionally accepts `accessibility` parameter. Use  `accessibility` parameter to indicate when a keychain item is accessible. Choose the most restrictive option that meets your app’s needs so that the system can protect that item to the greatest extent possible. Possible values are listed [here](https://developer.apple.com/documentation/security/keychain_services/keychain_items/item_attribute_keys_and_values#1679100). Please note that default value for accessibility parameter is kSecAttrAccessibleWhenUnlockedThisDeviceOnly - items with this attribute do not migrate to a new device.
 
 ```swift
-let success = oktaStorage.set(data: "password", forKey: "jdoe", accessibility: kSecAttrAccessibleWhenUnlockedThisDeviceOnly)
+let success = oktaStorage.set(data: "password",
+                              forKey: "jdoe",
+                              accessibility: kSecAttrAccessibleWhenUnlockedThisDeviceOnly)
 ```
 
 ### set(data: String, forKey key: String, behindBiometrics: Bool) throws
@@ -109,10 +113,25 @@ let success = oktaStorage.set(data: "password", forKey: "jdoe" behindBiometrics:
 ### Additional helper functions
 
 ```swift
-set(data: String, forKey key: String, accessGroup: String? = nil, accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) throws 
-set(data: String, forKey key: String, accessGroup: String? = nil, behindBiometrics: Bool) throws
-set(data: String, forKey key: String, accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly, behindBiometrics: Bool) throws
-set(data: String, forKey key: String, accessGroup: String? = nil, accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly, behindBiometrics: Bool) throws
+set(data: String, forKey key: String,
+    accessGroup: String? = nil,
+    accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) throws
+    
+set(data: String,
+    forKey key: String,
+    accessGroup: String? = nil,
+    behindBiometrics: Bool) throws
+
+set(data: String,
+    forKey key: String,
+    accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+    behindBiometrics: Bool) throws
+
+set(data: String,
+    forKey key: String,
+    accessGroup: String? = nil,
+    accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+    behindBiometrics: Bool) throws
 ```
 
 ### get(key: String) -> String throws
@@ -142,14 +161,21 @@ Removes the stored keychain item from the keychain
 let success = oktaStorage.delete("jdoe")
 ```
 
-### isBiometricsSupported -> Bool
+### isTouchIDSupported -> Bool
 
-Checks whether fingerprint enrolled with Touch ID or a face set up with Face ID. This method allows easy checking for such conditions.
+Checks whether device enrolled with Touch ID. If the biometry is not available, not enrolled or locked out, then the function call will return false.
 
 ```swift
-let isBiometricsSupported = storageManager.isBiometricsSupported()
+let isTouchIDSupported = storageManager.isTouchIDSupported()
 ```
 
+### isFaceIDSupported -> Bool
+
+Checks whether device enrolled with Face ID. If the biometry is not available, not enrolled or locked out, then the function call will return false.
+
+```swift
+let isFaceIDSupported = storageManager.isFaceIDSupported()
+```
 
 ## How to use this libary in Objective-C project
 1. Include auto generated swift header file into your .m file. Swift header file contains objective-c representation of Okta swift classes. Please note that the name of header file consists of your project name and “-Swift” suffix. For example if your project name is AuthApp, then auto generated header file name will be “AuthApp-Swift.h”
