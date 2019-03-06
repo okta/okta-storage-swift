@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -11,58 +11,101 @@
  */
 
 import Foundation
+import LocalAuthentication
 
 open class OktaSecureStorage: NSObject {
+
+    static let keychainErrorDomain = "com.okta.securestorage"
+
+    @objc open func set(_ string: String, forKey key: String) throws {
+        
+        try set(string, forKey: key, behindBiometrics: false)
+    }
     
-    static let dataErrorDomain = "com.okta.securestorage.data"
+    @objc open func set(_ string: String, forKey key: String, behindBiometrics: Bool) throws {
 
-    static let keychainErrorDomain = "com.okta.securestorage.keychain"
+        try set(string, forKey: key, behindBiometrics: behindBiometrics, accessGroup: nil, accessibility: nil)
+    }
+    
+    @objc open func set(_ string: String,
+                        forKey key: String,
+                        behindBiometrics: Bool,
+                        accessibility: CFString) throws {
 
-    @objc open func set(data: String, forKey key: String, behindBiometrics: Bool) throws {
+        try set(string, forKey: key, behindBiometrics: false, accessGroup: nil, accessibility: accessibility)
+    }
+    
+    @objc open func set(_ string: String,
+                        forKey key: String,
+                        behindBiometrics: Bool,
+                        accessGroup: String) throws {
 
+        try set(string, forKey: key, behindBiometrics: behindBiometrics, accessGroup: accessGroup, accessibility: nil)
+    }
+    
+    @objc open func set(_ string: String,
+                        forKey key: String,
+                        behindBiometrics: Bool,
+                        accessGroup: String?,
+                        accessibility: CFString?) throws {
+        
+        guard let bytesStream = string.data(using: .utf8) else {
+            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errSecParam), userInfo: nil)
+        }
+
+        try set(data: bytesStream, forKey: key, behindBiometrics: behindBiometrics, accessGroup: accessGroup, accessibility: accessibility)
+    }
+    
+    @objc open func set(data: Data, forKey key: String) throws {
+        
+        try set(data: data, forKey: key, behindBiometrics: false)
+    }
+    
+    @objc open func set(data: Data, forKey key: String, behindBiometrics: Bool) throws {
+        
         try set(data: data, forKey: key, behindBiometrics: behindBiometrics, accessGroup: nil, accessibility: nil)
     }
     
-    @objc open func set(data: String,
+    @objc open func set(data: Data,
                         forKey key: String,
                         behindBiometrics: Bool,
-                        accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) throws {
-
+                        accessibility: CFString) throws {
+        
         try set(data: data, forKey: key, behindBiometrics: false, accessGroup: nil, accessibility: accessibility)
     }
     
-    @objc open func set(data: String,
+    @objc open func set(data: Data,
                         forKey key: String,
                         behindBiometrics: Bool,
-                        accessGroup: String? = nil) throws {
-
+                        accessGroup: String) throws {
+        
         try set(data: data, forKey: key, behindBiometrics: behindBiometrics, accessGroup: accessGroup, accessibility: nil)
     }
     
-    @objc open func set(data: String,
+    @objc open func set(data: Data,
                         forKey key: String,
                         behindBiometrics: Bool,
-                        accessGroup: String? = nil,
-                        accessibility: CFString? = nil) throws {
-        
-        guard let bytesStream = data.data(using: .utf8) else {
-            throw NSError(domain: OktaSecureStorage.dataErrorDomain, code: -1, userInfo: nil)
-        }
+                        accessGroup: String?,
+                        accessibility: CFString?) throws {
 
-        var query = [
-            kSecClass as String: kSecClassGenericPassword as String,
-            kSecAttrService as String: "OktaSecureStorage",
-            kSecValueData as String: bytesStream,
-            kSecAttrAccount as String: key,
-            ] as [String : Any]
+        var query = baseQuery()
+        query[kSecValueData as String] = data
+        query[kSecAttrAccount as String] = key
         
         if behindBiometrics {
             
             var cfError: Unmanaged<CFError>?
             
+            var flags = SecAccessControlCreateFlags()
+            if #available(iOS 11.3, *) {
+                flags = SecAccessControlCreateFlags.biometryCurrentSet
+            } else {
+                flags = SecAccessControlCreateFlags.touchIDCurrentSet
+            }
+
             let secAccessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
                                                                    accessibility ?? kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-                                                                   SecAccessControlCreateFlags.touchIDCurrentSet, // check for ios version
+                                                                   flags,
                                                                    &cfError)
             
             if let error: Error = cfError?.takeRetainedValue() {
@@ -75,59 +118,113 @@ open class OktaSecureStorage: NSObject {
         } else {
             query[kSecAttrAccessible as String] = accessibility ?? kSecAttrAccessibleWhenUnlockedThisDeviceOnly
         }
-        
-        if let accessGroup = accessGroup {
-            query[kSecAttrAccessGroup as String] = accessGroup
-        }
-        
-        let cfDictionary = query as CFDictionary
-        // Delete existing (if applicable)
-        SecItemDelete(cfDictionary)
-        
-        let errorCode = SecItemAdd(cfDictionary, nil)
-        if errorCode != noErr {
+
+        var errorCode = SecItemAdd(query as CFDictionary, nil)
+        if errorCode == noErr {
+            return
+        } else if errorCode == errSecDuplicateItem {
+            let lookUpQuery = findQuery(for: key)
+            query.removeValue(forKey: kSecClass as String)
+            errorCode = SecItemUpdate(lookUpQuery as CFDictionary, query as CFDictionary)
+            if errorCode != noErr {
+                throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
+            }
+        } else {
             throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
         }
     }
 
-    @objc open func get(key: String) throws -> String {
+    @objc open func get(key: String, biometricPrompt prompt: String? = nil) throws -> String {
         
-        let q = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecReturnData as String: kCFBooleanTrue,
-            kSecMatchLimit as String: kSecMatchLimitOne,
-            kSecAttrAccount as String: key
-            ] as CFDictionary
+        var query = findQuery(for: key)
+        query[kSecReturnData as String] = kCFBooleanTrue
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
         
         var ref: AnyObject? = nil
         
-        let sanityCheck = SecItemCopyMatching(q, &ref)
-        guard sanityCheck == noErr else {
-            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(sanityCheck), userInfo: nil)
+        let errorCode = SecItemCopyMatching(query as CFDictionary, &ref)
+        guard errorCode == noErr else {
+            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
         }
         guard let data = ref as? Data else {
-            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(sanityCheck), userInfo: nil)
+            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
         }
         
         return String(data: data, encoding: .utf8)!
     }
 
-    @objc open func get(key: String, biometricPrompt prompt: String) throws -> String {
-        
-        return ""
-    }
-
     @objc open func delete(key: String) throws {
         
-    }
-    
-    @objc open func isTouchIDSupported() {
-        
         
     }
 
-    @objc open func isFaceIDSupported() {
+    @objc open func isTouchIDSupported() -> Bool {
         
-        
+        let  laContext = LAContext()
+        var authError : NSError?
+        return laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError)
     }
+    
+    @available(iOS 11.0, *)
+    @objc open func isFaceIDSupported() -> Bool {
+        
+        let  laContext = LAContext()
+        var authError : NSError?
+        let biometricsEnrolled = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError)
+        return biometricsEnrolled && laContext.biometryType == .faceID
+    }
+    
+    @objc open func bundleSeedId() throws -> String {
+
+        var query = baseQuery()
+        query[kSecAttrAccount as String] = "bundleSeedID"
+        query[kSecReturnAttributes as String] = kCFBooleanTrue
+
+        var ref: AnyObject? = nil
+
+        var errorCode = SecItemCopyMatching(query as CFDictionary, &ref)
+        if errorCode == errSecItemNotFound {
+            errorCode = SecItemAdd(query as CFDictionary, &ref)
+            guard errorCode == noErr else {
+                throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
+            }
+        }
+
+        guard let returnedDictionary = ref as? Dictionary<String, Any> else {
+            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errSecDecode), userInfo: nil)
+        }
+
+        guard let accessGroup = returnedDictionary[kSecAttrAccessGroup as String] as? String else {
+           throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errSecDecode), userInfo: nil)
+        }
+
+        let components = accessGroup.components(separatedBy: ".")
+
+        guard let teamId = components.first else {
+            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errSecDecode), userInfo: nil)
+        }
+
+        return teamId
+    }
+    
+    //MARK: Private
+    
+    private func baseQuery() -> Dictionary<String, Any> {
+        
+        let query = [
+            kSecClass as String: kSecClassGenericPassword as String,
+            kSecAttrService as String: "OktaSecureStorage"]
+
+        return query
+    }
+    
+    private func findQuery(for key: String) -> Dictionary<String, Any> {
+        
+        var query = baseQuery()
+        query[kSecAttrAccount as String] = key
+
+        return query
+    }
+    
+    
 }
