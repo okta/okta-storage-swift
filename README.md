@@ -150,9 +150,17 @@ Retrieves the stored keychain item from the keychain. Additionally method expect
 let password = oktaStorage.get("jdoe", prompt: “Please use Touch ID or Face ID to sign in”)
 ```
 
-### delete(key: String) -> Bool throws
+### delete(key: String) throws
 
 Removes the stored keychain item from the keychain
+
+```swift
+let success = oktaStorage.delete("jdoe")
+```
+
+### clear()  throws
+
+Removes all keychain items from the keychain
 
 ```swift
 let success = oktaStorage.delete("jdoe")
@@ -182,7 +190,7 @@ Example:
 ```objective-c
 OktaSecureStorage *storage = [OktaSecureStorage new];
 NSError *error;
-BOOL success = [storage setWithData:"password" forKey:"jdoe" error:&error];
+BOOL success = [storage setWithString:"password" forKey:"jdoe" error:&error];
 if (success) {
     NSString *password = [storage getWithKey:@"jdoe" error:&error];
     if (password != nil) {

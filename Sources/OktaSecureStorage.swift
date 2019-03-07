@@ -105,7 +105,9 @@ open class OktaSecureStorage: NSObject {
 
             let secAccessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
                                                                    accessibility ?? kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-                                                                   flags,
+                                                                   [flags,
+                                                                    SecAccessControlCreateFlags.or,
+                                                                    SecAccessControlCreateFlags.devicePasscode],
                                                                    &cfError)
             
             if let error: Error = cfError?.takeRetainedValue() {
@@ -123,9 +125,13 @@ open class OktaSecureStorage: NSObject {
         if errorCode == noErr {
             return
         } else if errorCode == errSecDuplicateItem {
-            let lookUpQuery = findQuery(for: key)
-            query.removeValue(forKey: kSecClass as String)
-            errorCode = SecItemUpdate(lookUpQuery as CFDictionary, query as CFDictionary)
+            
+            errorCode = SecItemDelete(query as CFDictionary)
+            if errorCode != noErr {
+                throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
+            }
+
+            errorCode = SecItemAdd(query as CFDictionary, nil)
             if errorCode != noErr {
                 throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
             }
@@ -140,6 +146,10 @@ open class OktaSecureStorage: NSObject {
         query[kSecReturnData as String] = kCFBooleanTrue
         query[kSecMatchLimit as String] = kSecMatchLimitOne
         
+        if let prompt = prompt {
+            query[kSecUseOperationPrompt as String] = prompt
+        }
+        
         var ref: AnyObject? = nil
         
         let errorCode = SecItemCopyMatching(query as CFDictionary, &ref)
@@ -149,29 +159,53 @@ open class OktaSecureStorage: NSObject {
         guard let data = ref as? Data else {
             throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
         }
+        guard let string = String(data: data, encoding: .utf8) else {
+            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errSecInvalidData), userInfo: nil)
+        }
         
-        return String(data: data, encoding: .utf8)!
+        return string
     }
 
     @objc open func delete(key: String) throws {
         
-        
-    }
-
-    @objc open func isTouchIDSupported() -> Bool {
-        
-        let  laContext = LAContext()
-        var authError : NSError?
-        return laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError)
+        let query = findQuery(for: key)
+        let errorCode = SecItemDelete(query as CFDictionary)
+        if errorCode != noErr && errorCode != errSecItemNotFound {
+            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
+        }
     }
     
-    @available(iOS 11.0, *)
+    @objc open func clear() throws {
+        
+        let query = baseQuery()
+        let errorCode = SecItemDelete(query as CFDictionary)
+        if errorCode != noErr && errorCode != errSecItemNotFound {
+            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
+        }
+    }
+
+    @objc open func isTouchIDSupported() -> Bool  {
+        
+        let laContext = LAContext()
+        var touchIdSupported = false
+        if #available(iOS 11.0, *) {
+            let touchIdEnrolled = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
+            touchIdSupported = laContext.biometryType == .touchID && touchIdEnrolled
+        } else {
+            touchIdSupported = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
+        }
+        return touchIdSupported
+    }
+    
     @objc open func isFaceIDSupported() -> Bool {
         
         let  laContext = LAContext()
-        var authError : NSError?
-        let biometricsEnrolled = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError)
-        return biometricsEnrolled && laContext.biometryType == .faceID
+        var faceIdSupported = false
+        if #available(iOS 11.0, *) {
+            faceIdSupported = laContext.biometryType == .faceID
+        }
+        let biometricsEnrolled = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
+        return biometricsEnrolled && faceIdSupported
     }
     
     @objc open func bundleSeedId() throws -> String {
@@ -225,6 +259,4 @@ open class OktaSecureStorage: NSObject {
 
         return query
     }
-    
-    
 }
