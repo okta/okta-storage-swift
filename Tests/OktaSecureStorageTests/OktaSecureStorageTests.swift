@@ -1,10 +1,18 @@
-//
-//  OktaSecureStorageTests.swift
-//  OktaSecureStorageTests
-//
-//  Created by Ildar Abdullin on 3/5/19.
-//  Copyright © 2019 Okta. All rights reserved.
-//
+/*
+ * Copyright 2019 Okta, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import XCTest
 import LocalAuthentication
@@ -22,8 +30,7 @@ class OktaSecureStorageTests: XCTestCase {
         try? secureStorage.clear()
     }
 
-    func testSetAndGetSuccessCases() {
-        
+    func testSetAndGetWithStringSuccessCases() {
         do {
             try secureStorage.set("token", forKey: "account1", behindBiometrics: false)
             let result = try secureStorage.get(key: "account1")
@@ -88,7 +95,9 @@ class OktaSecureStorageTests: XCTestCase {
         } catch {
             XCTFail("Keychain operation failed - \(error)")
         }
-        
+    }
+
+    func testSetAndGetWithDataSuccessCases() {
         do {
             try secureStorage.set(data:"token".data(using: .utf8)!, forKey: "account7", behindBiometrics: false)
             let result = try secureStorage.get(key: "account7")
@@ -112,7 +121,16 @@ class OktaSecureStorageTests: XCTestCase {
         } catch let error {
             XCTFail("Keychain operation failed - \(error)")
         }
-        
+
+        var accessGroup : String? = nil
+        do {
+            let seedId = try secureStorage.bundleSeedId()
+            accessGroup = seedId + ".com.okta.oktasecurestorage"
+        } catch let error {
+            XCTFail("Keychain operation failed - \(error)")
+            return
+        }
+
         do {
             try secureStorage.set(data:"token".data(using: .utf8)!, forKey: "account10", behindBiometrics: false, accessGroup:accessGroup!)
             let result = try secureStorage.get(key: "account10")
@@ -147,7 +165,6 @@ class OktaSecureStorageTests: XCTestCase {
     }
 
     func testDeleteSuccessCase() {
-        
         do {
             try secureStorage.set("token", forKey: "john doe", behindBiometrics: false)
         } catch let error {
@@ -169,7 +186,6 @@ class OktaSecureStorageTests: XCTestCase {
     }
 
     func testClearSuccessCase() {
-        
         do {
             try secureStorage.set("token", forKey: "account0", behindBiometrics: false)
             try secureStorage.set("token", forKey: "account1", behindBiometrics: false)
@@ -199,7 +215,6 @@ class OktaSecureStorageTests: XCTestCase {
     }
     
     func testTouchIDSupported() {
-        
         let laContext = LAContext()
         var touchIdSupported = false
         if #available(iOS 11.0, *) {
@@ -212,7 +227,6 @@ class OktaSecureStorageTests: XCTestCase {
     }
 
     func testFaceIDSupported() {
-        
         let  laContext = LAContext()
         var faceIdSupported = false
         if #available(iOS 11.0, *) {
@@ -224,7 +238,6 @@ class OktaSecureStorageTests: XCTestCase {
     }
 
     func testBundleSeedIdSuccessCase() {
-
         do {
             let seedId = try secureStorage.bundleSeedId()
             XCTAssertEqual(seedId, "HJPMDS86QA")
@@ -234,7 +247,6 @@ class OktaSecureStorageTests: XCTestCase {
     }
 
     func testDataOverwriteSuccessCase() {
-        
         do {
             try secureStorage.set("token", forKey: "john doe", behindBiometrics: false)
             var result = try secureStorage.get(key: "john doe")
@@ -248,7 +260,6 @@ class OktaSecureStorageTests: XCTestCase {
     }
 
     func testSetFailureCases() {
-
         do {
             try secureStorage.set("token", forKey: "", behindBiometrics: false, accessibility:"" as CFString)
             XCTFail("Exception expected here")
@@ -265,7 +276,6 @@ class OktaSecureStorageTests: XCTestCase {
     }
 
     func testGetFailureCases() {
-        
         do {
             _ = try secureStorage.get(key: "")
             XCTFail("Exception expected here")
