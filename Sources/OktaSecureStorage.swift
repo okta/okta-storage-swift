@@ -201,11 +201,11 @@ open class OktaSecureStorage: NSObject {
     @objc open func isFaceIDSupported() -> Bool {
         
         let  laContext = LAContext()
+        let biometricsEnrolled = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
         var faceIdSupported = false
         if #available(iOS 11.0, *) {
             faceIdSupported = laContext.biometryType == .faceID
         }
-        let biometricsEnrolled = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
         return biometricsEnrolled && faceIdSupported
     }
     
