@@ -229,10 +229,10 @@ class OktaSecureStorageTests: XCTestCase {
     func testFaceIDSupported() {
         let  laContext = LAContext()
         var faceIdSupported = false
+        let biometricsEnrolled = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
         if #available(iOS 11.0, *) {
             faceIdSupported = laContext.biometryType == .faceID
         }
-        let biometricsEnrolled = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
         let faceIDSupported = biometricsEnrolled && faceIdSupported
         XCTAssert(faceIDSupported == secureStorage.isFaceIDSupported())
     }

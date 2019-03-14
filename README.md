@@ -19,7 +19,6 @@ The storage library includes the following features:
 - [Save data to keychain behind a biometric factor](#save-data-to-keychain-behind-a-biometric-factor)
 - [Load data from keychain](#load-data-from-keychain)
 - [Delete data from keychain](#delete-data-from-keychain)
-- [Error handling](#error-handling)
 - [API Reference](#api-reference)
 - [How to use this libary in Objective-C project](#how-to-use-this-libary-in-objective-c-project)
 
@@ -38,37 +37,40 @@ let oktaStorage = OktaSecureStorage()
 ### Save data to keychain
 
 ```swift
-let success = oktaStorage.set(string: "password", forKey: "jdoe")
+do {
+    try oktaStorage.set(string: "password", forKey: "jdoe")
+} catch let error {
+    // Handle error
+}
 ```
 
 ### Save data to keychain behind a biometric factor
 
 ```swift
-let success = oktaStorage.set(string: "password", forKey: "jdoe" behindBiometrics: true)
+do {
+    try oktaStorage.set(string: "password", forKey: "jdoe" behindBiometrics: true)
+} catch let error {
+    // Handle error
+}
 ```
 
 ### Load data from keychain
 
 ```swift
-let password = oktaStorage.get("jdoe")
+do {
+    let password = try oktaStorage.get("jdoe")
+} catch let error {
+    // Handle error
+}
 ```
 
 ### Delete data from keychain
 
 ```swift
-let success = oktaStorage.delete("jdoe")
-```
-
-### Error handling
-
-API functions throw NSError object. Please add requried handling in your code.
-Example:
-
-```swift
 do {
-    try oktaStorage.set(string: "password", forKey: "jdoe", behindBiometrics: true)
-} catch let error as NSError {
-    print("Error: \(error.domain)")
+    try oktaStorage.delete("jdoe")
+} catch let error {
+    // Handle error
 }
 ```
 
@@ -79,7 +81,11 @@ do {
 Stores an item securely in the keychain. Method returns true on success and false on error.
 
 ```swift
-let success = oktaStorage.set("password", forKey: "jdoe")
+do {
+    try oktaStorage.set("password", forKey: "jdoe")
+} catch let error {
+    // Handle error
+}
 ```
 
 ### set(string: String, forKey key: String, behindBiometrics: Bool) throws
@@ -87,7 +93,11 @@ let success = oktaStorage.set("password", forKey: "jdoe")
 Stores an item securely and additionally accepts `behindBiometrics` parameter. Set this parameter to `true` if you want to store keychain item behind a biometric factor such as touch ID or face ID.
 
 ```swift
-let success = oktaStorage.set("password", forKey: "jdoe" behindBiometrics: true)
+do {
+    try oktaStorage.set("password", forKey: "jdoe" behindBiometrics: true)
+} catch let error {
+    // Handle error
+}
 ```
 
 ### set(string: String, forKey key: String, behindBiometrics: Bool, accessGroup: String) throws
@@ -95,9 +105,13 @@ let success = oktaStorage.set("password", forKey: "jdoe" behindBiometrics: true)
 Stores an item securely and additionally accepts `accessGroup` identifier. Use `accessGroup` to share keychain items between apps. Two or more apps that are in the same group can share keychain items because they share a common keychain access group entitlement. For more details, see [Sharing Access to Keychain Items Among a Collection of Apps](https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps)
 
 ```swift
-let success = oktaStorage.set("password",
-                              forKey: "jdoe",
-                              accessGroup: "TEAMSEEDID.com.mycompany.sharedkeychain")
+do {
+    try oktaStorage.set("password",
+                        forKey: "jdoe",
+                        accessGroup: "TEAMSEEDID.com.mycompany.sharedkeychain")
+} catch let error {
+    // Handle error
+}
 ```
 
 ### set(string: String, forKey key: String, behindBiometrics: Bool, accessibility: CFString) throws
@@ -105,9 +119,13 @@ let success = oktaStorage.set("password",
 Stores an item securely and additionally accepts `accessibility` parameter. Use  `accessibility` parameter to indicate when a keychain item is accessible. Choose the most restrictive option that meets your app’s needs so that the system can protect that item to the greatest extent possible. Possible values are listed [here](https://developer.apple.com/documentation/security/keychain_services/keychain_items/item_attribute_keys_and_values#1679100). Please note that default value for accessibility parameter is kSecAttrAccessibleWhenUnlockedThisDeviceOnly - items with this attribute do not migrate to a new device.
 
 ```swift
-let success = oktaStorage.set("password",
-                              forKey: "jdoe",
-                              accessibility: kSecAttrAccessibleWhenUnlockedThisDeviceOnly)
+do {
+    try oktaStorage.set("password",
+                        forKey: "jdoe",
+                        accessibility: kSecAttrAccessibleWhenUnlockedThisDeviceOnly)
+} catch let error {
+    // Handle error
+}
 ```
 
 ### Additional helper functions
@@ -144,10 +162,16 @@ set(data: Data,
 ### get(key: String, biometricPrompt prompt: String? = nil) -> String throws
 
 Retrieves the stored keychain item from the keychain. Additionally method expects optional `prompt` message for the keychain item stored behind a biometric factor. 
-> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action.
+> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action. It is advised to call  `get` function in a background thread
 
 ```swift
-let password = oktaStorage.get("jdoe", prompt: “Please use Touch ID or Face ID to sign in”)
+DispatchQueue.global().async {
+    do {
+        let password = try oktaStorage.get("jdoe", prompt: “Please use Touch ID or Face ID to sign in”)
+    } catch let error {
+        // Handle error
+    }
+}
 ```
 
 ### delete(key: String) throws
@@ -155,7 +179,11 @@ let password = oktaStorage.get("jdoe", prompt: “Please use Touch ID or Face ID
 Removes the stored keychain item from the keychain
 
 ```swift
-let success = oktaStorage.delete("jdoe")
+do {
+    try oktaStorage.delete("jdoe")
+} catch let error {
+    // Handle error
+}
 ```
 
 ### clear()  throws
@@ -163,7 +191,11 @@ let success = oktaStorage.delete("jdoe")
 Removes all keychain items from the keychain
 
 ```swift
-let success = oktaStorage.delete("jdoe")
+do {
+    try oktaStorage.clear()
+} catch let error {
+    // Handle error
+}
 ```
 
 ### isTouchIDSupported -> Bool
