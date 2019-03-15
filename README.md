@@ -19,7 +19,6 @@ The storage library includes the following features:
 - [Save data to keychain behind a biometric factor](#save-data-to-keychain-behind-a-biometric-factor)
 - [Load data from keychain](#load-data-from-keychain)
 - [Delete data from keychain](#delete-data-from-keychain)
-- [Error handling](#error-handling)
 - [API Reference](#api-reference)
 - [How to use this libary in Objective-C project](#how-to-use-this-libary-in-objective-c-project)
 
@@ -38,118 +37,182 @@ let oktaStorage = OktaSecureStorage()
 ### Save data to keychain
 
 ```swift
-let success = oktaStorage.set(data: "password", forKey: "jdoe")
+do {
+    try oktaStorage.set(string: "password", forKey: "jdoe")
+} catch let error {
+    // Handle error
+}
 ```
 
 ### Save data to keychain behind a biometric factor
 
 ```swift
-let success = oktaStorage.set(data: "password", forKey: "jdoe" behindBiometrics: true)
+do {
+    try oktaStorage.set(string: "password", forKey: "jdoe" behindBiometrics: true)
+} catch let error {
+    // Handle error
+}
 ```
 
 ### Load data from keychain
 
 ```swift
-let password = oktaStorage.get("jdoe")
+do {
+    let password = try oktaStorage.get("jdoe")
+} catch let error {
+    // Handle error
+}
 ```
 
 ### Delete data from keychain
 
 ```swift
-let success = oktaStorage.delete("jdoe")
-```
-
-### Error handling
-
-API functions throw NSError object. Please add requried handling in your code.
-Example:
-
-```swift
 do {
-    try oktaStorage.set(data: "password", forKey: "jdoe", behindBiometrics: true)
-} catch let error as NSError {
-    print("Error: \(error.domain)")
+    try oktaStorage.delete("jdoe")
+} catch let error {
+    // Handle error
 }
 ```
 
 ## API Reference
 
-### set(data: String, forKey key: String) -> Bool throws
+### set(string: String, forKey key: String) -> Bool throws
 
 Stores an item securely in the keychain. Method returns true on success and false on error.
 
 ```swift
-let success = oktaStorage.set(data: "password", forKey: "jdoe")
+do {
+    try oktaStorage.set("password", forKey: "jdoe")
+} catch let error {
+    // Handle error
+}
 ```
 
-### set(data: String, forKey key: String, accessGroup: String? = nil) throws
+### set(string: String, forKey key: String, behindBiometrics: Bool) throws
+
+Stores an item securely and additionally accepts `behindBiometrics` parameter. Set this parameter to `true` if you want to store keychain item behind a biometric factor such as touch ID or face ID.
+
+```swift
+do {
+    try oktaStorage.set("password", forKey: "jdoe" behindBiometrics: true)
+} catch let error {
+    // Handle error
+}
+```
+
+### set(string: String, forKey key: String, behindBiometrics: Bool, accessGroup: String) throws
 
 Stores an item securely and additionally accepts `accessGroup` identifier. Use `accessGroup` to share keychain items between apps. Two or more apps that are in the same group can share keychain items because they share a common keychain access group entitlement. For more details, see [Sharing Access to Keychain Items Among a Collection of Apps](https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps)
 
 ```swift
-let success = oktaStorage.set(data: "password", forKey: "jdoe", accessGroup: "com.mycompany.sharedkeychain")
+do {
+    try oktaStorage.set("password",
+                        forKey: "jdoe",
+                        accessGroup: "TEAMSEEDID.com.mycompany.sharedkeychain")
+} catch let error {
+    // Handle error
+}
 ```
 
-### set(data: String, forKey key: String, accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) throws
+### set(string: String, forKey key: String, behindBiometrics: Bool, accessibility: CFString) throws
 
-Stores an item securely and additionally accepts `accessibility` key. Parameter `accessibility` indicates when your app needs access to the data in a keychain item. Possible values are listed [here](https://developer.apple.com/documentation/security/keychain_services/keychain_items/item_attribute_keys_and_values#1679100)
-
-```swift
-let success = oktaStorage.set(data: "password", forKey: "jdoe", accessibility: kSecAttrAccessibleWhenUnlockedThisDeviceOnly)
-```
-
-### set(data: String, forKey key: String, behindBiometrics: Bool) throws
-
-Stores an item securely and additionally accepts `behindBiometrics` parameter. Set this parameter to `true` if you want to store keychain item behind a biometric factor such as fingerprint or face ID.
+Stores an item securely and additionally accepts `accessibility` parameter. Use  `accessibility` parameter to indicate when a keychain item is accessible. Choose the most restrictive option that meets your app’s needs so that the system can protect that item to the greatest extent possible. Possible values are listed [here](https://developer.apple.com/documentation/security/keychain_services/keychain_items/item_attribute_keys_and_values#1679100). Please note that default value for accessibility parameter is kSecAttrAccessibleWhenUnlockedThisDeviceOnly - items with this attribute do not migrate to a new device.
 
 ```swift
-let success = oktaStorage.set(data: "password", forKey: "jdoe" behindBiometrics: true)
+do {
+    try oktaStorage.set("password",
+                        forKey: "jdoe",
+                        accessibility: kSecAttrAccessibleWhenUnlockedThisDeviceOnly)
+} catch let error {
+    // Handle error
+}
 ```
 
 ### Additional helper functions
 
 ```swift
-set(data: String, forKey key: String, accessGroup: String? = nil, accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) throws 
-set(data: String, forKey key: String, accessGroup: String? = nil, behindBiometrics: Bool) throws
-set(data: String, forKey key: String, accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly, behindBiometrics: Bool) throws
-set(data: String, forKey key: String, accessGroup: String? = nil, accessibility: CFString? = kSecAttrAccessibleWhenUnlockedThisDeviceOnly, behindBiometrics: Bool) throws
+set(string: String,
+    forKey key: String,
+    accessGroup: String? = nil,
+    accessibility: CFString?) throws
+
+set(data: Data,
+    forKey key: String) trows
+    
+set(data: Data,
+    forKey key: String,
+    behindBiometrics: Bool) trows
+
+set(data: Data,
+    forKey key: String,
+    behindBiometrics: Bool,
+    accessGroup: String) throws
+
+set(data: Data,
+    forKey key: String,
+    behindBiometrics: Bool,
+    accessibility: CFString) throws
+
+set(data: Data,
+    forKey key: String,
+    accessGroup: String?,
+    accessibility: CFString?) throws
 ```
 
-### get(key: String) -> String throws
+### get(key: String, biometricPrompt prompt: String? = nil) -> String throws
 
-Retrieves the stored keychain item from the keychain.
-> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action.
+Retrieves the stored keychain item from the keychain. Additionally method expects optional `prompt` message for the keychain item stored behind a biometric factor. 
+> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action. It is advised to call  `get` function in a background thread
 
 ```swift
-let password = oktaStorage.get("jdoe")
+DispatchQueue.global().async {
+    do {
+        let password = try oktaStorage.get("jdoe", prompt: “Please use Touch ID or Face ID to sign in”)
+    } catch let error {
+        // Handle error
+    }
+}
 ```
 
-### get(userPrompt prompt: String, key: String) -> String throws
-
-Retrieves the stored keychain item from the keychain. Additionally method expects `userPrompt` message for the keychain item stored behind a biometric factor. 
-> * Note: iOS shows default system message If `userPrompt` parameter is emty.
-> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action.
-
-```swift
-let password = oktaStorage.get(userPrompt: “Please use Touch ID or Face ID to sign in” key: "jdoe")
-```
-
-### delete(key: String) -> Bool throws
+### delete(key: String) throws
 
 Removes the stored keychain item from the keychain
 
 ```swift
-let success = oktaStorage.delete("jdoe")
+do {
+    try oktaStorage.delete("jdoe")
+} catch let error {
+    // Handle error
+}
 ```
 
-### isBiometricsSupported -> Bool
+### clear()  throws
 
-Checks whether fingerprint enrolled with Touch ID or a face set up with Face ID. This method allows easy checking for such conditions.
+Removes all keychain items from the keychain
 
 ```swift
-let isBiometricsSupported = storageManager.isBiometricsSupported()
+do {
+    try oktaStorage.clear()
+} catch let error {
+    // Handle error
+}
 ```
 
+### isTouchIDSupported -> Bool
+
+Checks whether device enrolled with Touch ID. If the biometry is not available, not enrolled or locked out, then the function call will return false.
+
+```swift
+let isTouchIDSupported = storageManager.isTouchIDSupported()
+```
+
+### isFaceIDSupported -> Bool
+
+Checks whether device enrolled with Face ID. If the biometry is not available, not enrolled or locked out, then the function call will return false.
+
+```swift
+let isFaceIDSupported = storageManager.isFaceIDSupported()
+```
 
 ## How to use this libary in Objective-C project
 1. Include auto generated swift header file into your .m file. Swift header file contains objective-c representation of Okta swift classes. Please note that the name of header file consists of your project name and “-Swift” suffix. For example if your project name is AuthApp, then auto generated header file name will be “AuthApp-Swift.h”
@@ -159,7 +222,7 @@ Example:
 ```objective-c
 OktaSecureStorage *storage = [OktaSecureStorage new];
 NSError *error;
-BOOL success = [storage setWithData:"password" forKey:"jdoe" error:&error];
+BOOL success = [storage setWithString:"password" forKey:"jdoe" error:&error];
 if (success) {
     NSString *password = [storage getWithKey:@"jdoe" error:&error];
     if (password != nil) {
