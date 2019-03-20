@@ -174,6 +174,21 @@ DispatchQueue.global().async {
 }
 ```
 
+### getData(key: String, biometricPrompt prompt: String? = nil) -> Data throws
+
+Retrieves the stored keychain item from the keychain. Additionally method expects optional `prompt` message for the keychain item stored behind a biometric factor. 
+> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action. It is advised to call  `getData` function in a background thread
+
+```swift
+DispatchQueue.global().async {
+    do {
+        let passwordData = try oktaStorage.getData("jdoe", prompt: “Please use Touch ID or Face ID to sign in”)
+    } catch let error {
+        // Handle error
+    }
+}
+```
+
 ### delete(key: String) throws
 
 Removes the stored keychain item from the keychain

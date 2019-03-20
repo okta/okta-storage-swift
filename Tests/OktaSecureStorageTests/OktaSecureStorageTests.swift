@@ -100,24 +100,24 @@ class OktaSecureStorageTests: XCTestCase {
     func testSetAndGetWithDataSuccessCases() {
         do {
             try secureStorage.set(data:"token".data(using: .utf8)!, forKey: "account7", behindBiometrics: false)
-            let result = try secureStorage.get(key: "account7")
-            XCTAssertEqual("token", result)
+            let result = try secureStorage.getData(key: "account7")
+            XCTAssertEqual("token".data(using: .utf8)!, result)
         } catch let error {
             XCTFail("Keychain operation failed - \(error)")
         }
         
         do {
             try secureStorage.set(data:"token".data(using: .utf8)!, forKey: "account8", behindBiometrics: true)
-            let result = try secureStorage.get(key: "account8")
-            XCTAssertEqual("token", result)
+            let result = try secureStorage.getData(key: "account8")
+            XCTAssertEqual("token".data(using: .utf8)!, result)
         } catch let error {
             XCTFail("Keychain operation failed - \(error)")
         }
         
         do {
             try secureStorage.set(data:"token".data(using: .utf8)!, forKey: "account9", behindBiometrics: false, accessibility:kSecAttrAccessibleAlways)
-            let result = try secureStorage.get(key: "account9")
-            XCTAssertEqual("token", result)
+            let result = try secureStorage.getData(key: "account9")
+            XCTAssertEqual("token".data(using: .utf8)!, result)
         } catch let error {
             XCTFail("Keychain operation failed - \(error)")
         }
@@ -133,8 +133,8 @@ class OktaSecureStorageTests: XCTestCase {
 
         do {
             try secureStorage.set(data:"token".data(using: .utf8)!, forKey: "account10", behindBiometrics: false, accessGroup:accessGroup!)
-            let result = try secureStorage.get(key: "account10")
-            XCTAssertEqual("token", result)
+            let result = try secureStorage.getData(key: "account10")
+            XCTAssertEqual("token".data(using: .utf8)!, result)
         } catch let error {
             XCTFail("Keychain operation failed - \(error)")
         }
@@ -145,8 +145,8 @@ class OktaSecureStorageTests: XCTestCase {
                                   behindBiometrics: false,
                                   accessGroup:accessGroup,
                                   accessibility:kSecAttrAccessibleAfterFirstUnlock)
-            let result = try secureStorage.get(key: "account11")
-            XCTAssertEqual("token", result)
+            let result = try secureStorage.getData(key: "account11")
+            XCTAssertEqual("token".data(using: .utf8)!, result)
         } catch {
             XCTFail("Keychain operation failed - \(error)")
         }
@@ -157,8 +157,8 @@ class OktaSecureStorageTests: XCTestCase {
                                   behindBiometrics: true,
                                   accessGroup:accessGroup,
                                   accessibility:kSecAttrAccessibleAfterFirstUnlock)
-            let result = try secureStorage.get(key: "account12")
-            XCTAssertEqual("token", result)
+            let result = try secureStorage.getData(key: "account12")
+            XCTAssertEqual("token".data(using: .utf8)!, result)
         } catch {
             XCTFail("Keychain operation failed - \(error)")
         }
