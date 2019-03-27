@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var retrievedPasswordTextField: UITextField!
     
-    let secureStorage = OktaSecureStorage()
+    let secureStorage = OktaSecureStorage(applicationPassword: "password")
     
     override func viewDidLoad() {
         super.viewDidLoad()
