@@ -164,6 +164,55 @@ class OktaSecureStorageTests: XCTestCase {
         }
     }
 
+    func testSetWithApplicationPassword() {
+        secureStorage = OktaSecureStorage(applicationPassword: "password")
+        do {
+            try secureStorage.set("token", forKey: "john doe", behindBiometrics: false)
+            let result = try secureStorage.getData(key: "john doe")
+            XCTAssertEqual("token".data(using: .utf8)!, result)
+        } catch let error {
+            XCTFail("Keychain operation failed - \(error)")
+        }
+    }
+
+    func testSetWithWrongApplicationPassword() {
+#if targetEnvironment(simulator)
+        return
+#else
+        secureStorage = OktaSecureStorage(applicationPassword: "password")
+        do {
+            try secureStorage.set("token", forKey: "john doe", behindBiometrics: false)
+            secureStorage = OktaSecureStorage(applicationPassword: "wrong_password")
+            let result = try secureStorage.get(key: "john doe")
+            XCTFail("Failure is expected, got data - \(result)")
+        } catch let error as NSError {
+            XCTAssertEqual(-25293, error.code)
+        }
+        
+        do {
+            secureStorage = OktaSecureStorage(applicationPassword: "password")
+            let result = try secureStorage.get(key: "john doe")
+            XCTAssertEqual("token", result)
+        } catch let error {
+            XCTFail("Keychain operation failed - \(error)")
+        }
+#endif
+    }
+
+    func testSetAndGetWithEmptyApplicationPassword() {
+#if targetEnvironment(simulator)
+        return
+#else
+        secureStorage = OktaSecureStorage(applicationPassword: "")
+        do {
+            try secureStorage.set("token", forKey: "john doe", behindBiometrics: false)
+            XCTFail("Failure is expected")
+        } catch let error as NSError {
+            XCTAssertEqual(-25293, error.code)
+        }
+#endif
+    }
+
     func testDeleteSuccessCase() {
         do {
             try secureStorage.set("token", forKey: "john doe", behindBiometrics: false)
