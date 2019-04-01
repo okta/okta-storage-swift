@@ -32,6 +32,8 @@ Add `import OktaSecureStorage` to your source code
 
 ```swift
 let oktaStorage = OktaSecureStorage()
+or
+let oktaStorage = OktaSecureStorage(applicationPassword: "user_password")
 ```
 
 ### Save data to keychain
@@ -75,6 +77,10 @@ do {
 ```
 
 ## API Reference
+
+### init(applicationPassword password: String? = nil)
+
+Initializes OktaSecureStorage instance. The optional parameter `applicationPassword` allows items in the keychain to be secured using an additional password. This way, if the user does not have a passcode or Touch ID set up, the items will still be secure, and it adds an extra layer of security if they do have a passcode set
 
 ### set(string: String, forKey key: String) -> Bool throws
 

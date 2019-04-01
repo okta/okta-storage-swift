@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var retrievedPasswordTextField: UITextField!
     
-    let secureStorage = OktaSecureStorage()
+    let secureStorage = OktaSecureStorage(applicationPassword: "password")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +51,7 @@ class ViewController: UIViewController {
             storeStackView.isHidden = true
             passwordTextField.resignFirstResponder()
         } catch let error as NSError {
-            let alert = UIAlertController(title: "Error", message: "Error with error code - \(error.code)", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Error", message: "Error with error code: \(error.code)", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
         }
@@ -66,7 +66,7 @@ class ViewController: UIViewController {
                 }
             } catch let error as NSError {
                 DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Error", message: "Error with error code - \(error.code)", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Error", message: "Error with error code: \(error.code)", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 }
@@ -81,7 +81,7 @@ class ViewController: UIViewController {
             storeStackView.isHidden = false
             passwordTextField.text = ""
         } catch let error as NSError {
-            let alert = UIAlertController(title: "Error", message: "Error with error code - \(error.code)", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Error", message: "Error with error code: \(error.code)", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
         }
