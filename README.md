@@ -1,4 +1,8 @@
 [<img src="https://devforum.okta.com/uploads/oktadev/original/1X/bf54a16b5fda189e4ad2706fb57cbb7a1e5b8deb.png" align="right" width="256px"/>](https://devforum.okta.com/)
+[![Version](https://img.shields.io/cocoapods/v/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
+[![License](https://img.shields.io/cocoapods/l/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
+[![Platform](https://img.shields.io/cocoapods/p/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
+[![Swift](https://img.shields.io/badge/swift-4.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
 
 # Okta Secure Storage Library
 
