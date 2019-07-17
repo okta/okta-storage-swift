@@ -1,4 +1,8 @@
 [<img src="https://devforum.okta.com/uploads/oktadev/original/1X/bf54a16b5fda189e4ad2706fb57cbb7a1e5b8deb.png" align="right" width="256px"/>](https://devforum.okta.com/)
+[![Version](https://img.shields.io/cocoapods/v/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
+[![License](https://img.shields.io/cocoapods/l/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
+[![Platform](https://img.shields.io/cocoapods/p/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
+[![Swift](https://img.shields.io/badge/swift-4.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
 
 # Okta Secure Storage Library
 
@@ -32,6 +36,8 @@ Add `import OktaSecureStorage` to your source code
 
 ```swift
 let oktaStorage = OktaSecureStorage()
+or
+let oktaStorage = OktaSecureStorage(applicationPassword: "user_password")
 ```
 
 ### Save data to keychain
@@ -75,6 +81,10 @@ do {
 ```
 
 ## API Reference
+
+### init(applicationPassword password: String? = nil)
+
+Initializes OktaSecureStorage instance. The optional parameter `applicationPassword` allows items in the keychain to be secured using an additional password. This way, if the user does not have a passcode or Touch ID set up, the items will still be secure, and it adds an extra layer of security if they do have a passcode set
 
 ### set(string: String, forKey key: String) -> Bool throws
 
@@ -168,6 +178,21 @@ Retrieves the stored keychain item from the keychain. Additionally method expect
 DispatchQueue.global().async {
     do {
         let password = try oktaStorage.get("jdoe", prompt: “Please use Touch ID or Face ID to sign in”)
+    } catch let error {
+        // Handle error
+    }
+}
+```
+
+### getData(key: String, biometricPrompt prompt: String? = nil) -> Data throws
+
+Retrieves the stored keychain item from the keychain. Additionally method expects optional `prompt` message for the keychain item stored behind a biometric factor. 
+> * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action. It is advised to call  `getData` function in a background thread
+
+```swift
+DispatchQueue.global().async {
+    do {
+        let passwordData = try oktaStorage.getData("jdoe", prompt: “Please use Touch ID or Face ID to sign in”)
     } catch let error {
         // Handle error
     }

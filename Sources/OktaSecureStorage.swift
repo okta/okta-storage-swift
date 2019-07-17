@@ -21,6 +21,13 @@ open class OktaSecureStorage: NSObject {
 
     static let keychainErrorDomain = "com.okta.securestorage"
 
+    let applicationPassword: String?
+
+    @objc public init(applicationPassword password: String? = nil) {
+        applicationPassword = password
+        super.init()
+    }
+
     @objc open func set(_ string: String, forKey key: String) throws {
         
         try set(string, forKey: key, behindBiometrics: false)
@@ -95,27 +102,44 @@ open class OktaSecureStorage: NSObject {
         var query = baseQuery()
         query[kSecValueData as String] = data
         query[kSecAttrAccount as String] = key
+
+        var applicationPasswordSet = false
+        if let _ = applicationPassword {
+            applicationPasswordSet = true
+        }
         
-        if behindBiometrics {
-            
-            var cfError: Unmanaged<CFError>?
-            
-            var flags = SecAccessControlCreateFlags()
-            if #available(iOS 11.3, *) {
-                flags = SecAccessControlCreateFlags.biometryCurrentSet
-            } else {
-                flags = SecAccessControlCreateFlags.touchIDCurrentSet
+        if behindBiometrics || applicationPasswordSet {
+
+            var biometryAndPasscodeFlags = SecAccessControlCreateFlags()
+            if behindBiometrics {
+                if #available(iOS 11.3, *) {
+                    biometryAndPasscodeFlags.insert(SecAccessControlCreateFlags.biometryCurrentSet)
+                } else {
+                    biometryAndPasscodeFlags.insert(SecAccessControlCreateFlags.touchIDCurrentSet)
+                }
+                biometryAndPasscodeFlags.insert(SecAccessControlCreateFlags.or)
+                biometryAndPasscodeFlags.insert(SecAccessControlCreateFlags.devicePasscode)
             }
 
+            var applicationPasswordFlag = SecAccessControlCreateFlags()
+            if applicationPasswordSet {
+                applicationPasswordFlag.insert(SecAccessControlCreateFlags.applicationPassword)
+                let laContext = LAContext()
+                guard let passwordData = applicationPassword?.data(using: .utf8) else {
+                    throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errSecParam), userInfo: nil)
+                }
+                laContext.setCredential(passwordData, type: LACredentialType.applicationPassword)
+                query[kSecUseAuthenticationContext as String] = laContext
+            }
+
+            var cfError: Unmanaged<CFError>?
             let secAccessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
                                                                    accessibility ?? kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-                                                                   [flags,
-                                                                    SecAccessControlCreateFlags.or,
-                                                                    SecAccessControlCreateFlags.devicePasscode],
+                                                                   [biometryAndPasscodeFlags,
+                                                                    applicationPasswordFlag],
                                                                    &cfError)
             
             if let error: Error = cfError?.takeRetainedValue() {
-                
                 throw error
             }
             
@@ -146,12 +170,28 @@ open class OktaSecureStorage: NSObject {
 
     @objc open func get(key: String, biometricPrompt prompt: String? = nil) throws -> String {
         
+        let data = try getData(key: key, biometricPrompt: prompt)
+        guard let string = String(data: data, encoding: .utf8) else {
+            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errSecInvalidData), userInfo: nil)
+        }
+        
+        return string
+    }
+
+    @objc open func getData(key: String, biometricPrompt prompt: String? = nil) throws -> Data {
+        
         var query = findQuery(for: key)
         query[kSecReturnData as String] = kCFBooleanTrue
         query[kSecMatchLimit as String] = kSecMatchLimitOne
         
         if let prompt = prompt {
             query[kSecUseOperationPrompt as String] = prompt
+        }
+
+        if let password = applicationPassword {
+            let laContext = LAContext()
+            laContext.setCredential(password.data(using: .utf8), type: LACredentialType.applicationPassword)
+            query[kSecUseAuthenticationContext as String] = laContext
         }
         
         var ref: AnyObject? = nil
@@ -160,11 +200,8 @@ open class OktaSecureStorage: NSObject {
         guard errorCode == noErr, let data = ref as? Data else {
             throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
         }
-        guard let string = String(data: data, encoding: .utf8) else {
-            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errSecInvalidData), userInfo: nil)
-        }
-        
-        return string
+
+        return data
     }
 
     @objc open func delete(key: String) throws {
