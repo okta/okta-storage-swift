@@ -147,11 +147,11 @@ set(string: String,
     accessibility: CFString?) throws
 
 set(data: Data,
-    forKey key: String) trows
+    forKey key: String) throws
     
 set(data: Data,
     forKey key: String,
-    behindBiometrics: Bool) trows
+    behindBiometrics: Bool) throws
 
 set(data: Data,
     forKey key: String,
