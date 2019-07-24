@@ -1,4 +1,6 @@
-[<img src="https://devforum.okta.com/uploads/oktadev/original/1X/bf54a16b5fda189e4ad2706fb57cbb7a1e5b8deb.png" align="right" width="256px"/>](https://devforum.okta.com/)
+[![iOS_13 ready](https://img.shields.io/badge/iOS_13-ready-brightgreen.svg?style=for-the-badge)](https://github.com/okta/okta-storage-swift/releases/tag/0.1.0)
+
+[<img src="https://aws1.discourse-cdn.com/standard14/uploads/oktadev/original/1X/0c6402653dfb70edc661d4976a43a46f33e5e919.png" align="right" width="256px"/>](https://devforum.okta.com/)
 [![Version](https://img.shields.io/cocoapods/v/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
 [![License](https://img.shields.io/cocoapods/l/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
 [![Platform](https://img.shields.io/cocoapods/p/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
