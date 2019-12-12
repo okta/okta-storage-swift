@@ -102,6 +102,9 @@ open class OktaSecureStorage: NSObject {
         var query = baseQuery()
         query[kSecValueData as String] = data
         query[kSecAttrAccount as String] = key
+        if let accessGroup = accessGroup {
+            query[kSecAttrAccessGroup as String] = accessGroup
+        }
 
         var applicationPasswordSet = false
         if let _ = applicationPassword {
@@ -170,7 +173,12 @@ open class OktaSecureStorage: NSObject {
 
     @objc open func get(key: String, biometricPrompt prompt: String? = nil) throws -> String {
         
-        let data = try getData(key: key, biometricPrompt: prompt)
+        return try get(key: key, biometricPrompt: prompt, accessGroup: nil)
+    }
+
+    @objc open func get(key: String, biometricPrompt prompt: String? = nil, accessGroup: String? = nil) throws -> String {
+        
+        let data = try getData(key: key, biometricPrompt: prompt, accessGroup: accessGroup)
         guard let string = String(data: data, encoding: .utf8) else {
             throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errSecInvalidData), userInfo: nil)
         }
@@ -178,9 +186,9 @@ open class OktaSecureStorage: NSObject {
         return string
     }
 
-    @objc open func getData(key: String, biometricPrompt prompt: String? = nil) throws -> Data {
-        
-        var query = findQuery(for: key)
+    @objc open func getData(key: String, biometricPrompt prompt: String? = nil, accessGroup: String? = nil) throws -> Data {
+
+        var query = findQuery(for: key, accessGroup: accessGroup)
         query[kSecReturnData as String] = kCFBooleanTrue
         query[kSecMatchLimit as String] = kSecMatchLimitOne
         
@@ -205,8 +213,13 @@ open class OktaSecureStorage: NSObject {
     }
 
     @objc open func delete(key: String) throws {
-        
-        let query = findQuery(for: key)
+
+        try delete(key: key, accessGroup:  nil)
+    }
+
+    @objc open func delete(key: String, accessGroup: String? = nil) throws {
+
+        let query = findQuery(for: key, accessGroup: accessGroup)
         let errorCode = SecItemDelete(query as CFDictionary)
         if errorCode != noErr && errorCode != errSecItemNotFound {
             throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
@@ -290,10 +303,13 @@ open class OktaSecureStorage: NSObject {
         return query
     }
     
-    private func findQuery(for key: String) -> Dictionary<String, Any> {
-        
+    private func findQuery(for key: String, accessGroup: String? = nil) -> Dictionary<String, Any> {
+
         var query = baseQuery()
         query[kSecAttrAccount as String] = key
+        if let accessGroup = accessGroup {
+            query[kSecAttrAccessGroup as String] = accessGroup
+        }
 
         return query
     }
