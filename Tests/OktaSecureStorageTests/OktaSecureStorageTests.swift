@@ -332,4 +332,44 @@ class OktaSecureStorageTests: XCTestCase {
             XCTAssert(error.code == errSecItemNotFound)
         }
     }
+
+    func testSetGetDeleteWithGroupId() {
+
+        let seedId = try? secureStorage.bundleSeedId()
+        let accessGroup = (seedId ?? "") + ".com.okta.oktasecurestorage"
+        do {
+            try secureStorage.set("data1", forKey: "key1", behindBiometrics: false, accessGroup: accessGroup)
+            let result = try secureStorage.get(key: "key1")
+            XCTAssertEqual("data1", result)
+        } catch let error {
+            XCTFail("Keychain operation failed - \(error)")
+        }
+
+        do {
+            try secureStorage.set("data2", forKey: "key2", behindBiometrics: false, accessGroup: accessGroup)
+            let result = try secureStorage.get(key: "key2", accessGroup: accessGroup)
+            XCTAssertEqual("data2", result)
+        } catch let error {
+            XCTFail("Keychain operation failed - \(error)")
+        }
+
+        do {
+            try secureStorage.set("data", forKey: "key", behindBiometrics: false, accessGroup: "wrong_group")
+            XCTFail("Unexpected successful set")
+        } catch let error as NSError {
+            XCTAssertEqual(error.code, -34018)
+        }
+
+        do {
+            try secureStorage.delete(key: "key1")
+        } catch let error {
+            XCTFail("Keychain operation failed - \(error)")
+        }
+
+        do {
+            try secureStorage.delete(key: "key2", accessGroup: accessGroup)
+        } catch let error {
+            XCTFail("Keychain operation failed - \(error)")
+        }
+    }
 }
