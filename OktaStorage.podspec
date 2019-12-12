@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'OktaStorage'
-  s.version          = '0.2.0'
+  s.version          = '1.0.0'
   s.summary          = 'This library provides convenient APIs to utilize keychain services'
   s.description      = <<-DESC
 Store passwords, tokens and other secrets in an encrypted database using OktaStorage library
