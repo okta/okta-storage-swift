@@ -298,9 +298,9 @@ open class OktaSecureStorage: NSObject {
         var query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword as String,
             kSecAttrService as String: "OktaSecureStorage"]
-        //if #available(macOS 10.15, iOS 13.0, *) {
-            //query[kSecUseDataProtectionKeychain as String] = kCFBooleanTrue
-        //}
+        if #available(macOS 10.15, iOS 13.0, *) {
+            query[kSecUseDataProtectionKeychain as String] = kCFBooleanTrue
+        }
         return query
     }
     
