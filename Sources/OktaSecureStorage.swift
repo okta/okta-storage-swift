@@ -64,7 +64,7 @@ open class OktaSecureStorage: NSObject {
             throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errSecParam), userInfo: nil)
         }
 
-        try set(data: bytesStream, forKey: key, behindBiometrics: behindBiometrics, accessGroup: accessGroup, accessibility: accessibility)
+        try set(data: bytesStream, forKey: key, behindBiometrics: behindBiometrics, behindWatch: false, accessGroup: accessGroup, accessibility: accessibility)
     }
     
     @objc open func set(data: Data, forKey key: String) throws {
@@ -74,7 +74,7 @@ open class OktaSecureStorage: NSObject {
     
     @objc open func set(data: Data, forKey key: String, behindBiometrics: Bool) throws {
         
-        try set(data: data, forKey: key, behindBiometrics: behindBiometrics, accessGroup: nil, accessibility: nil)
+        try set(data: data, forKey: key, behindBiometrics: behindBiometrics, behindWatch: false, accessGroup: nil, accessibility: nil)
     }
     
     @objc open func set(data: Data,
@@ -82,7 +82,7 @@ open class OktaSecureStorage: NSObject {
                         behindBiometrics: Bool,
                         accessibility: CFString) throws {
         
-        try set(data: data, forKey: key, behindBiometrics: false, accessGroup: nil, accessibility: accessibility)
+        try set(data: data, forKey: key, behindBiometrics: false, behindWatch: false, accessGroup: nil, accessibility: accessibility)
     }
     
     @objc open func set(data: Data,
@@ -90,12 +90,14 @@ open class OktaSecureStorage: NSObject {
                         behindBiometrics: Bool,
                         accessGroup: String) throws {
         
-        try set(data: data, forKey: key, behindBiometrics: behindBiometrics, accessGroup: accessGroup, accessibility: nil)
+        try set(data: data, forKey: key, behindBiometrics: behindBiometrics,
+                behindWatch: false, accessGroup: accessGroup, accessibility: nil)
     }
     
     @objc open func set(data: Data,
                         forKey key: String,
                         behindBiometrics: Bool,
+                        behindWatch: Bool,
                         accessGroup: String?,
                         accessibility: CFString?) throws {
 
@@ -134,6 +136,17 @@ open class OktaSecureStorage: NSObject {
                 laContext.setCredential(passwordData, type: LACredentialType.applicationPassword)
                 query[kSecUseAuthenticationContext as String] = laContext
             }
+
+            var behindWatchFlag = SecAccessControlCreateFlags()
+
+            if behindWatch {
+#if os(OSX)
+                    //Only works on MacOS 10.15+
+                    behindWatchFlag.insert(SecAccessControlCreateFlags.watch)
+#endif
+            }
+
+
 
             var cfError: Unmanaged<CFError>?
             let secAccessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
@@ -315,3 +328,4 @@ open class OktaSecureStorage: NSObject {
         return query
     }
 }
+
