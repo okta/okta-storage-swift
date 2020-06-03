@@ -56,7 +56,7 @@ do {
 
 ```swift
 do {
-    try oktaStorage.set(string: "password", forKey: "jdoe" behindBiometrics: true)
+    try oktaStorage.set(string: "password", forKey: "jdoe", behindBiometrics: true)
 } catch let error {
     // Handle error
 }
@@ -106,7 +106,7 @@ Stores an item securely and additionally accepts `behindBiometrics` parameter. S
 
 ```swift
 do {
-    try oktaStorage.set("password", forKey: "jdoe" behindBiometrics: true)
+    try oktaStorage.set("password", forKey: "jdoe", behindBiometrics: true)
 } catch let error {
     // Handle error
 }
