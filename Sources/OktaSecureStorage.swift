@@ -156,13 +156,13 @@ open class OktaSecureStorage: NSObject {
         if errorCode == noErr {
             return
         } else if errorCode == errSecDuplicateItem {
-            
-            errorCode = SecItemDelete(query as CFDictionary)
-            if errorCode != noErr {
-                throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
+            let searchQuery = findQuery(for: key, accessGroup: accessGroup)
+            query.removeValue(forKey: kSecClass as String)
+            query.removeValue(forKey: kSecAttrService as String)
+            if #available(macOS 10.15, iOS 13.0, *) {
+                query.removeValue(forKey: kSecUseDataProtectionKeychain as String)
             }
-
-            errorCode = SecItemAdd(query as CFDictionary, nil)
+            errorCode = SecItemUpdate(searchQuery as CFDictionary, query as CFDictionary)
             if errorCode != noErr {
                 throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
             }
