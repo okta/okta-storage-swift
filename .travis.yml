@@ -1,5 +1,30 @@
 language: objective-c
-osx_image: xcode11.3
-xcode_project: Tests/OktaSecureStorage.xcodeproj
-xcode_scheme: OktaSecureStorage
-xcode_destination: platform=iOS Simulator,OS=latest,name=iPhone 8
+os: osx
+osx_image: xcode12.5
+
+before_install:
+  - gem install xcpretty
+  - gem install cocoapods
+jobs:
+  include:
+    - stage: Unit Tests
+      name: iOS
+      script:
+      - xcodebuild -project OktaSecureStorage.xcodeproj -scheme "OktaSecureStorage" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty
+    - stage: Build
+      name: macOS
+      script:
+      - xcodebuild -project OktaSecureStorage.xcodeproj -scheme "OktaSecureStorage-macOS" -destination "platform=macOS" build | xcpretty
+    - stage: Dependency Manager Validation
+      name: CocoaPods
+      script:
+      - pod lib lint --allow-warnings
+    - stage: Dependency Manager Validation
+      name: Carthage
+      addons:
+        homebrew:
+          packages:
+          - carthage
+          update: true
+      script:
+      - carthage build --use-xcframeworks --no-skip-current
