@@ -1,6 +1,5 @@
-//
 /*
- * Copyright 2019 Okta, Inc.
+ * Copyright 2019-Present Okta, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +15,7 @@
  */
 
 import UIKit
+import OktaSecureStorage
 
 class ViewController: UIViewController {
 

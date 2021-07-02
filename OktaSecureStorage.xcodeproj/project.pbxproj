@@ -7,17 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		922905B0268B3C8C00AE0909 /* OktaSecureStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922905A9268B3C8C00AE0909 /* OktaSecureStorage.framework */; };
+		922905B1268B3C8C00AE0909 /* OktaSecureStorage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 922905A9268B3C8C00AE0909 /* OktaSecureStorage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		922905D3268B66E000AE0909 /* OktaSecureStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922905D2268B66E000AE0909 /* OktaSecureStorage.swift */; };
+		922905D4268B66E000AE0909 /* OktaSecureStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922905D2268B66E000AE0909 /* OktaSecureStorage.swift */; };
+		922905D8268B66F000AE0909 /* OktaSecureStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922905D6268B66F000AE0909 /* OktaSecureStorageTests.swift */; };
 		A1F8FA86222EF68D00B9D1E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F8FA85222EF68D00B9D1E8 /* AppDelegate.swift */; };
 		A1F8FA88222EF68D00B9D1E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F8FA87222EF68D00B9D1E8 /* ViewController.swift */; };
 		A1F8FA8B222EF68D00B9D1E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1F8FA89222EF68D00B9D1E8 /* Main.storyboard */; };
 		A1F8FA8D222EF69300B9D1E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1F8FA8C222EF69300B9D1E8 /* Assets.xcassets */; };
 		A1F8FA90222EF69300B9D1E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1F8FA8E222EF69300B9D1E8 /* LaunchScreen.storyboard */; };
-		A1F8FA9B222EF69300B9D1E8 /* OktaSecureStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F8FA9A222EF69300B9D1E8 /* OktaSecureStorageTests.swift */; };
-		A1F8FAA7222EF6F700B9D1E8 /* OktaSecureStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F8FAA6222EF6F700B9D1E8 /* OktaSecureStorage.swift */; };
-		A1F8FAA8222EF6F700B9D1E8 /* OktaSecureStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F8FAA6222EF6F700B9D1E8 /* OktaSecureStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		922905AE268B3C8C00AE0909 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1F8FA7A222EF68D00B9D1E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 922905A8268B3C8C00AE0909;
+			remoteInfo = "OktaSecureStorage-iOS";
+		};
 		A1F8FA97222EF69300B9D1E8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A1F8FA7A222EF68D00B9D1E8 /* Project object */;
@@ -27,9 +36,32 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		922905B5268B3C8C00AE0909 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				922905B1268B3C8C00AE0909 /* OktaSecureStorage.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		922905A9268B3C8C00AE0909 /* OktaSecureStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OktaSecureStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		922905BB268B3CB200AE0909 /* OktaSecureStorage_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OktaSecureStorage_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		922905CC268B66B200AE0909 /* OktaSecureStorage_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OktaSecureStorage_macOS.h; sourceTree = "<group>"; };
+		922905CD268B66B200AE0909 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		922905CF268B66B200AE0909 /* OktaSecureStorage_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OktaSecureStorage_iOS.h; sourceTree = "<group>"; };
+		922905D0268B66B200AE0909 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		922905D2268B66E000AE0909 /* OktaSecureStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaSecureStorage.swift; sourceTree = "<group>"; };
+		922905D6268B66F000AE0909 /* OktaSecureStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaSecureStorageTests.swift; sourceTree = "<group>"; };
+		922905D7268B66F000AE0909 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A11685ED222F2E7A0003AA6B /* OktaSecureStorage.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OktaSecureStorage.entitlements; sourceTree = "<group>"; };
-		A1F8FA82222EF68D00B9D1E8 /* OktaSecureStorage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OktaSecureStorage.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1F8FA82222EF68D00B9D1E8 /* OktaSecureStorage-Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OktaSecureStorage-Sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1F8FA85222EF68D00B9D1E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A1F8FA87222EF68D00B9D1E8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A1F8FA8A222EF68D00B9D1E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -37,16 +69,28 @@
 		A1F8FA8F222EF69300B9D1E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A1F8FA91222EF69300B9D1E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1F8FA96222EF69300B9D1E8 /* OktaSecureStorageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OktaSecureStorageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A1F8FA9A222EF69300B9D1E8 /* OktaSecureStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaSecureStorageTests.swift; sourceTree = "<group>"; };
-		A1F8FA9C222EF69300B9D1E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A1F8FAA6222EF6F700B9D1E8 /* OktaSecureStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaSecureStorage.swift; path = ../../Sources/OktaSecureStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		922905A6268B3C8C00AE0909 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		922905B8268B3CB200AE0909 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A1F8FA7F222EF68D00B9D1E8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				922905B0268B3C8C00AE0909 /* OktaSecureStorage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,12 +104,57 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		922905CA268B66B200AE0909 /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				922905CB268B66B200AE0909 /* OktaSecureStorage-macOS */,
+				922905CE268B66B200AE0909 /* OktaSecureStorage-iOS */,
+			);
+			path = Framework;
+			sourceTree = "<group>";
+		};
+		922905CB268B66B200AE0909 /* OktaSecureStorage-macOS */ = {
+			isa = PBXGroup;
+			children = (
+				922905CC268B66B200AE0909 /* OktaSecureStorage_macOS.h */,
+				922905CD268B66B200AE0909 /* Info.plist */,
+			);
+			path = "OktaSecureStorage-macOS";
+			sourceTree = "<group>";
+		};
+		922905CE268B66B200AE0909 /* OktaSecureStorage-iOS */ = {
+			isa = PBXGroup;
+			children = (
+				922905CF268B66B200AE0909 /* OktaSecureStorage_iOS.h */,
+				922905D0268B66B200AE0909 /* Info.plist */,
+			);
+			path = "OktaSecureStorage-iOS";
+			sourceTree = "<group>";
+		};
+		922905D1268B66E000AE0909 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				922905D2268B66E000AE0909 /* OktaSecureStorage.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		922905D5268B66F000AE0909 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				922905D6268B66F000AE0909 /* OktaSecureStorageTests.swift */,
+				922905D7268B66F000AE0909 /* Info.plist */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		A1F8FA79222EF68D00B9D1E8 = {
 			isa = PBXGroup;
 			children = (
 				A1F8FA84222EF68D00B9D1E8 /* OktaSecureStorage */,
-				A1F8FAA5222EF6B200B9D1E8 /* lib */,
-				A1F8FA99222EF69300B9D1E8 /* OktaSecureStorageTests */,
+				922905D5268B66F000AE0909 /* Tests */,
+				922905D1268B66E000AE0909 /* Sources */,
+				922905CA268B66B200AE0909 /* Framework */,
 				A1F8FA83222EF68D00B9D1E8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -73,8 +162,10 @@
 		A1F8FA83222EF68D00B9D1E8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A1F8FA82222EF68D00B9D1E8 /* OktaSecureStorage.app */,
+				A1F8FA82222EF68D00B9D1E8 /* OktaSecureStorage-Sample.app */,
 				A1F8FA96222EF69300B9D1E8 /* OktaSecureStorageTests.xctest */,
+				922905A9268B3C8C00AE0909 /* OktaSecureStorage.framework */,
+				922905BB268B3CB200AE0909 /* OktaSecureStorage_macOS.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,41 +184,79 @@
 			path = OktaSecureStorage;
 			sourceTree = "<group>";
 		};
-		A1F8FA99222EF69300B9D1E8 /* OktaSecureStorageTests */ = {
-			isa = PBXGroup;
-			children = (
-				A1F8FA9A222EF69300B9D1E8 /* OktaSecureStorageTests.swift */,
-				A1F8FA9C222EF69300B9D1E8 /* Info.plist */,
-			);
-			path = OktaSecureStorageTests;
-			sourceTree = "<group>";
-		};
-		A1F8FAA5222EF6B200B9D1E8 /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				A1F8FAA6222EF6F700B9D1E8 /* OktaSecureStorage.swift */,
-			);
-			path = lib;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		922905A4268B3C8C00AE0909 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		922905B6268B3CB200AE0909 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
-		A1F8FA81222EF68D00B9D1E8 /* OktaSecureStorage */ = {
+		922905A8268B3C8C00AE0909 /* OktaSecureStorage */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A1F8FA9F222EF69300B9D1E8 /* Build configuration list for PBXNativeTarget "OktaSecureStorage" */;
+			buildConfigurationList = 922905B2268B3C8C00AE0909 /* Build configuration list for PBXNativeTarget "OktaSecureStorage" */;
 			buildPhases = (
-				A1F8FA7E222EF68D00B9D1E8 /* Sources */,
-				A1F8FA7F222EF68D00B9D1E8 /* Frameworks */,
-				A1F8FA80222EF68D00B9D1E8 /* Resources */,
+				922905A4268B3C8C00AE0909 /* Headers */,
+				922905A5268B3C8C00AE0909 /* Sources */,
+				922905A6268B3C8C00AE0909 /* Frameworks */,
+				922905A7268B3C8C00AE0909 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = OktaSecureStorage;
+			productName = "OktaSecureStorage-iOS";
+			productReference = 922905A9268B3C8C00AE0909 /* OktaSecureStorage.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		922905BA268B3CB200AE0909 /* OktaSecureStorage-macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 922905C0268B3CB200AE0909 /* Build configuration list for PBXNativeTarget "OktaSecureStorage-macOS" */;
+			buildPhases = (
+				922905B6268B3CB200AE0909 /* Headers */,
+				922905B7268B3CB200AE0909 /* Sources */,
+				922905B8268B3CB200AE0909 /* Frameworks */,
+				922905B9268B3CB200AE0909 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "OktaSecureStorage-macOS";
+			productName = "OktaSecureStorage-macOS";
+			productReference = 922905BB268B3CB200AE0909 /* OktaSecureStorage_macOS.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		A1F8FA81222EF68D00B9D1E8 /* OktaSecureStorage-Sample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1F8FA9F222EF69300B9D1E8 /* Build configuration list for PBXNativeTarget "OktaSecureStorage-Sample" */;
+			buildPhases = (
+				A1F8FA7E222EF68D00B9D1E8 /* Sources */,
+				A1F8FA7F222EF68D00B9D1E8 /* Frameworks */,
+				A1F8FA80222EF68D00B9D1E8 /* Resources */,
+				922905B5268B3C8C00AE0909 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				922905AF268B3C8C00AE0909 /* PBXTargetDependency */,
+			);
+			name = "OktaSecureStorage-Sample";
 			productName = OktaSecureStorage;
-			productReference = A1F8FA82222EF68D00B9D1E8 /* OktaSecureStorage.app */;
+			productReference = A1F8FA82222EF68D00B9D1E8 /* OktaSecureStorage-Sample.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A1F8FA95222EF69300B9D1E8 /* OktaSecureStorageTests */ = {
@@ -154,10 +283,16 @@
 		A1F8FA7A222EF68D00B9D1E8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1010;
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = Okta;
 				TargetAttributes = {
+					922905A8268B3C8C00AE0909 = {
+						CreatedOnToolsVersion = 12.5;
+					};
+					922905BA268B3CB200AE0909 = {
+						CreatedOnToolsVersion = 12.5;
+					};
 					A1F8FA81222EF68D00B9D1E8 = {
 						CreatedOnToolsVersion = 10.1;
 						SystemCapabilities = {
@@ -188,13 +323,29 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A1F8FA81222EF68D00B9D1E8 /* OktaSecureStorage */,
+				A1F8FA81222EF68D00B9D1E8 /* OktaSecureStorage-Sample */,
 				A1F8FA95222EF69300B9D1E8 /* OktaSecureStorageTests */,
+				922905A8268B3C8C00AE0909 /* OktaSecureStorage */,
+				922905BA268B3CB200AE0909 /* OktaSecureStorage-macOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		922905A7268B3C8C00AE0909 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		922905B9268B3CB200AE0909 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A1F8FA80222EF68D00B9D1E8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -215,13 +366,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		922905A5268B3C8C00AE0909 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				922905D3268B66E000AE0909 /* OktaSecureStorage.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		922905B7268B3CB200AE0909 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				922905D4268B66E000AE0909 /* OktaSecureStorage.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A1F8FA7E222EF68D00B9D1E8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				A1F8FA88222EF68D00B9D1E8 /* ViewController.swift in Sources */,
 				A1F8FA86222EF68D00B9D1E8 /* AppDelegate.swift in Sources */,
-				A1F8FAA7222EF6F700B9D1E8 /* OktaSecureStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,17 +395,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1F8FA9B222EF69300B9D1E8 /* OktaSecureStorageTests.swift in Sources */,
-				A1F8FAA8222EF6F700B9D1E8 /* OktaSecureStorage.swift in Sources */,
+				922905D8268B66F000AE0909 /* OktaSecureStorageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		922905AF268B3C8C00AE0909 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 922905A8268B3C8C00AE0909 /* OktaSecureStorage */;
+			targetProxy = 922905AE268B3C8C00AE0909 /* PBXContainerItemProxy */;
+		};
 		A1F8FA98222EF69300B9D1E8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A1F8FA81222EF68D00B9D1E8 /* OktaSecureStorage */;
+			target = A1F8FA81222EF68D00B9D1E8 /* OktaSecureStorage-Sample */;
 			targetProxy = A1F8FA97222EF69300B9D1E8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -264,6 +434,114 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		922905B3268B3C8C00AE0909 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = HJPMDS86QA;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Framework/OktaSecureStorage-iOS/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "okta.com.OktaSecureStorage-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		922905B4268B3C8C00AE0909 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = HJPMDS86QA;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Framework/OktaSecureStorage-iOS/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "okta.com.OktaSecureStorage-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		922905C1268B3CB200AE0909 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Framework/OktaSecureStorage-macOS/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "okta.com.OktaSecureStorage-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		922905C2268B3CB200AE0909 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Framework/OktaSecureStorage-macOS/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "okta.com.OktaSecureStorage-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		A1F8FA9D222EF69300B9D1E8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -290,6 +568,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -315,13 +594,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -351,6 +632,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -370,12 +652,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -383,19 +667,18 @@
 		A1F8FAA0222EF69300B9D1E8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = OktaSecureStorage/OktaSecureStorage.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HJPMDS86QA;
 				INFOPLIST_FILE = OktaSecureStorage/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.okta.OktaSecureStorage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -403,19 +686,18 @@
 		A1F8FAA1222EF69300B9D1E8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = OktaSecureStorage/OktaSecureStorage.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HJPMDS86QA;
 				INFOPLIST_FILE = OktaSecureStorage/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.okta.OktaSecureStorage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -427,8 +709,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = OktaSecureStorageTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -436,9 +717,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.okta.OktaSecureStorageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OktaSecureStorage.app/OktaSecureStorage";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OktaSecureStorage-Sample.app/OktaSecureStorage-Sample";
 			};
 			name = Debug;
 		};
@@ -449,8 +729,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = OktaSecureStorageTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -458,15 +737,32 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.okta.OktaSecureStorageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OktaSecureStorage.app/OktaSecureStorage";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OktaSecureStorage-Sample.app/OktaSecureStorage-Sample";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		922905B2268B3C8C00AE0909 /* Build configuration list for PBXNativeTarget "OktaSecureStorage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				922905B3268B3C8C00AE0909 /* Debug */,
+				922905B4268B3C8C00AE0909 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		922905C0268B3CB200AE0909 /* Build configuration list for PBXNativeTarget "OktaSecureStorage-macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				922905C1268B3CB200AE0909 /* Debug */,
+				922905C2268B3CB200AE0909 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A1F8FA7D222EF68D00B9D1E8 /* Build configuration list for PBXProject "OktaSecureStorage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -476,7 +772,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A1F8FA9F222EF69300B9D1E8 /* Build configuration list for PBXNativeTarget "OktaSecureStorage" */ = {
+		A1F8FA9F222EF69300B9D1E8 /* Build configuration list for PBXNativeTarget "OktaSecureStorage-Sample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A1F8FAA0222EF69300B9D1E8 /* Debug */,

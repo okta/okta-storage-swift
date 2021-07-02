@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Okta, Inc.
+ * Copyright 2019-Present Okta, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 import XCTest
 import LocalAuthentication
-@testable import OktaSecureStorage
+import OktaSecureStorage
 
 class OktaSecureStorageTests: XCTestCase {
 

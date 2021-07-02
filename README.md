@@ -1,14 +1,13 @@
-[![iOS_13 ready](https://img.shields.io/badge/iOS_13-ready-brightgreen.svg?style=for-the-badge)](https://github.com/okta/okta-storage-swift/releases/tag/0.1.0)
-
 [<img src="https://aws1.discourse-cdn.com/standard14/uploads/oktadev/original/1X/0c6402653dfb70edc661d4976a43a46f33e5e919.png" align="right" width="256px"/>](https://devforum.okta.com/)
 [![Version](https://img.shields.io/cocoapods/v/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
+[![Carthage](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat-square)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/cocoapods/l/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
 [![Platform](https://img.shields.io/cocoapods/p/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
-[![Swift](https://img.shields.io/badge/swift-4.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Swift](https://img.shields.io/badge/swift-5.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
 
 # Okta Secure Storage Library
 
-This library is a Swift wrapper around the iOS LocalAuthentication and Security frameworks. The library provides convenient APIs to utilize keychain services by giving your app a mechanism to store small bits of user data in an encrypted database. The keychain is not limited to passwords and tokens. You can store other secrets that the user explicitly cares about, such as credit card information or even short notes.
+This library is a Swift wrapper around the iOS `LocalAuthentication` and `Security` frameworks. The library provides convenient APIs to utilize keychain services by giving your app a mechanism to store small bits of user data in an encrypted database. The keychain is not limited to passwords and tokens. You can store other secrets that the user explicitly cares about, such as credit card information or even short notes.
 
 The storage library includes the following features:
 1. Get, set and delete keychain items
@@ -27,14 +26,15 @@ The storage library includes the following features:
 - [Delete data from keychain](#delete-data-from-keychain)
 - [API Reference](#api-reference)
 - [How to use this libary in Objective-C project](#how-to-use-this-libary-in-objective-c-project)
+- [Contributing](#contributing)
 
 <!-- /TOC -->
 
 ## Usage
 
-Add `import OktaSecureStorage` to your source code
+Add `import OktaSecureStorage` to your source code.
 
-### Create instance of OktaSecureStorage class
+### Create instance of `OktaSecureStorage` class
 
 ```swift
 let oktaStorage = OktaSecureStorage()
@@ -84,11 +84,11 @@ do {
 
 ## API Reference
 
-### init(applicationPassword password: String? = nil)
+### `init(applicationPassword:)`
 
 Initializes OktaSecureStorage instance. The optional parameter `applicationPassword` allows items in the keychain to be secured using an additional password. This way, if the user does not have a passcode or Touch ID set up, the items will still be secure, and it adds an extra layer of security if they do have a passcode set
 
-### set(string: String, forKey key: String) -> Bool throws
+### `set(string:forKey:)`
 
 Stores an item securely in the keychain. Method returns true on success and false on error.
 
@@ -100,7 +100,7 @@ do {
 }
 ```
 
-### set(string: String, forKey key: String, behindBiometrics: Bool) throws
+### `set(string:forKey:behindBiometrics:)`
 
 Stores an item securely and additionally accepts `behindBiometrics` parameter. Set this parameter to `true` if you want to store keychain item behind a biometric factor such as touch ID or face ID.
 
@@ -112,7 +112,7 @@ do {
 }
 ```
 
-### set(string: String, forKey key: String, behindBiometrics: Bool, accessGroup: String) throws
+### `set(string:forKey:behindBiometrics:accessGroup:)`
 
 Stores an item securely and additionally accepts `accessGroup` identifier. Use `accessGroup` to share keychain items between apps. Two or more apps that are in the same group can share keychain items because they share a common keychain access group entitlement. For more details, see [Sharing Access to Keychain Items Among a Collection of Apps](https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps)
 
@@ -126,7 +126,7 @@ do {
 }
 ```
 
-### set(string: String, forKey key: String, behindBiometrics: Bool, accessibility: CFString) throws
+### `set(string:forKey:behindBiometrics:accessibility:)`
 
 Stores an item securely and additionally accepts `accessibility` parameter. Use  `accessibility` parameter to indicate when a keychain item is accessible. Choose the most restrictive option that meets your app’s needs so that the system can protect that item to the greatest extent possible. Possible values are listed [here](https://developer.apple.com/documentation/security/keychain_services/keychain_items/item_attribute_keys_and_values#1679100). Please note that default value for accessibility parameter is kSecAttrAccessibleWhenUnlockedThisDeviceOnly - items with this attribute do not migrate to a new device.
 
@@ -171,7 +171,7 @@ set(data: Data,
     accessibility: CFString?) throws
 ```
 
-### get(key: String, biometricPrompt prompt: String? = nil) -> String throws
+### `get(key:biometricPrompt:)`
 
 Retrieves the stored keychain item from the keychain. Additionally method expects optional `prompt` message for the keychain item stored behind a biometric factor. 
 > * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action. It is advised to call  `get` function in a background thread
@@ -186,7 +186,7 @@ DispatchQueue.global().async {
 }
 ```
 
-### getData(key: String, biometricPrompt prompt: String? = nil) -> Data throws
+### `getData(key:biometricPrompt:)`
 
 Retrieves the stored keychain item from the keychain. Additionally method expects optional `prompt` message for the keychain item stored behind a biometric factor. 
 > * Note: iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action. It is advised to call  `getData` function in a background thread
@@ -201,7 +201,7 @@ DispatchQueue.global().async {
 }
 ```
 
-### delete(key: String) throws
+### `delete(key:)`
 
 Removes the stored keychain item from the keychain
 
@@ -213,7 +213,7 @@ do {
 }
 ```
 
-### clear()  throws
+### `clear()`
 
 Removes all keychain items from the keychain
 
@@ -225,7 +225,7 @@ do {
 }
 ```
 
-### isTouchIDSupported -> Bool
+### `isTouchIDSupported`
 
 Checks whether device enrolled with Touch ID. If the biometry is not available, not enrolled or locked out, then the function call will return false.
 
@@ -233,7 +233,7 @@ Checks whether device enrolled with Touch ID. If the biometry is not available, 
 let isTouchIDSupported = storageManager.isTouchIDSupported()
 ```
 
-### isFaceIDSupported -> Bool
+### `isFaceIDSupported`
 
 Checks whether device enrolled with Face ID. If the biometry is not available, not enrolled or locked out, then the function call will return false.
 
@@ -241,7 +241,7 @@ Checks whether device enrolled with Face ID. If the biometry is not available, n
 let isFaceIDSupported = storageManager.isFaceIDSupported()
 ```
 
-## How to use this libary in Objective-C project
+## How to use this library in Objective-C project
 1. Include auto generated swift header file into your .m file. Swift header file contains objective-c representation of Okta swift classes. Please note that the name of header file consists of your project name and “-Swift” suffix. For example if your project name is AuthApp, then auto generated header file name will be “AuthApp-Swift.h”
 2. Start using programming components available in swift header file
 
@@ -257,3 +257,7 @@ if (success) {
     }
 }
 ```
+
+## Contributing
+
+We're happy to accept contributions and PRs! Please, read [contributing guide](CONTRIBUTING.md). 
