@@ -28,3 +28,7 @@ jobs:
           update: true
       script:
       - carthage build --use-xcframeworks --no-skip-current
+    - stage: Dependency Manager Validation
+      name: SPM
+      script: 
+      - swift test

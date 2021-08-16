@@ -10,8 +10,8 @@
 This library is a Swift wrapper around the iOS `LocalAuthentication` and `Security` frameworks. The library provides convenient APIs to utilize keychain services by giving your app a mechanism to store small bits of user data in an encrypted database. The keychain is not limited to passwords and tokens. You can store other secrets that the user explicitly cares about, such as credit card information or even short notes.
 
 The storage library includes the following features:
-1. Get, set and delete keychain items
-2. Store to the keychain behind a biometric factor such as fingerprint or face ID
+1. Get, set and delete keychain items.
+2. Store to the keychain behind a biometric factor such as ingerprint or Face ID.
 
 
 **Table of Contents**
