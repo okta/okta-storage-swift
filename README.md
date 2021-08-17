@@ -11,7 +11,7 @@ This library is a Swift wrapper around the iOS `LocalAuthentication` and `Securi
 
 The storage library includes the following features:
 1. Get, set and delete keychain items.
-2. Store to the keychain behind a biometric factor such as ingerprint or Face ID.
+2. Store to the keychain behind a biometric factor such as fingerprint or Face ID.
 
 
 **Table of Contents**
