@@ -31,4 +31,4 @@ jobs:
     - stage: Dependency Manager Validation
       name: SPM
       script: 
-      - swift test
+      - swift build
