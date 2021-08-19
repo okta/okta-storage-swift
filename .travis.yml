@@ -7,7 +7,7 @@ before_install:
   - gem install cocoapods
 jobs:
   include:
-    - stage: Unit Tests
+    - stage: Integration Tests
       name: iOS
       script:
       - xcodebuild -project OktaSecureStorage.xcodeproj -scheme "OktaSecureStorage" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty
@@ -31,4 +31,4 @@ jobs:
     - stage: Dependency Manager Validation
       name: SPM
       script: 
-      - swift build
+      - swift test
