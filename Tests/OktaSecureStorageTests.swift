@@ -30,6 +30,7 @@ class OktaSecureStorageTests: XCTestCase {
         try? secureStorage.clear()
     }
 
+    #if !SWIFT_PACKAGE
     func testSetAndGetWithStringSuccessCases() {
         do {
             try secureStorage.set("token", forKey: "account1", behindBiometrics: false)
@@ -171,7 +172,9 @@ class OktaSecureStorageTests: XCTestCase {
         }
         #endif
     }
+    #endif
 
+    #if !SWIFT_PACKAGE
     func testSetWithApplicationPassword() {
         #if !targetEnvironment(simulator)
             secureStorage = OktaSecureStorage(applicationPassword: "password")
@@ -272,6 +275,7 @@ class OktaSecureStorageTests: XCTestCase {
             XCTAssert(error.code == errSecItemNotFound)
         }
     }
+    #endif
     
     func testTouchIDSupported() {
         let laContext = LAContext()
@@ -296,6 +300,7 @@ class OktaSecureStorageTests: XCTestCase {
         XCTAssert(faceIDSupported == secureStorage.isFaceIDSupported())
     }
 
+    #if !SWIFT_PACKAGE
     func testBundleSeedIdSuccessCase() {
         do {
             let seedId = try secureStorage.bundleSeedId()
@@ -317,7 +322,9 @@ class OktaSecureStorageTests: XCTestCase {
             XCTFail("Keychain operation failed - \(error)")
         }
     }
+    #endif
 
+    #if !SWIFT_PACKAGE
     func testSetFailureCases() {
         do {
             try secureStorage.set("token", forKey: "", behindBiometrics: false, accessibility:"" as CFString)
@@ -331,15 +338,6 @@ class OktaSecureStorageTests: XCTestCase {
             XCTFail("Exception expected here")
         } catch let error as NSError {
             XCTAssert(error.code == errSecParam)
-        }
-    }
-
-    func testGetFailureCases() {
-        do {
-            _ = try secureStorage.get(key: "")
-            XCTFail("Exception expected here")
-        } catch let error as NSError {
-            XCTAssert(error.code == errSecItemNotFound)
         }
     }
 
@@ -380,6 +378,16 @@ class OktaSecureStorageTests: XCTestCase {
             try secureStorage.delete(key: "key2", accessGroup: accessGroup)
         } catch let error {
             XCTFail("Keychain operation failed - \(error)")
+        }
+    }
+    #endif
+    
+    func testGetFailureCases() {
+        do {
+            _ = try secureStorage.get(key: "")
+            XCTFail("Exception expected here")
+        } catch let error as NSError {
+            XCTAssert(error.code == errSecItemNotFound)
         }
     }
 }

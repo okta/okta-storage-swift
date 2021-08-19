@@ -32,7 +32,7 @@ open class OktaSecureStorage: NSObject {
         
         try set(string, forKey: key, behindBiometrics: false)
     }
-    
+        
     @objc open func set(_ string: String, forKey key: String, behindBiometrics: Bool) throws {
 
         try set(string, forKey: key, behindBiometrics: behindBiometrics, accessGroup: nil, accessibility: nil)
