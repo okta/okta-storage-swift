@@ -72,6 +72,16 @@ do {
 }
 ```
 
+Also, if you need to know what keys are already stored:
+
+```swift
+do {
+    let keys = try oktaStorage.getStoredKeys()
+} catch let error {
+    // Handle error
+}
+```
+
 ### Delete data from keychain
 
 ```swift
@@ -195,6 +205,21 @@ Retrieves the stored keychain item from the keychain. Additionally method expect
 DispatchQueue.global().async {
     do {
         let passwordData = try oktaStorage.getData("jdoe", prompt: “Please use Touch ID or Face ID to sign in”)
+    } catch let error {
+        // Handle error
+    }
+}
+```
+
+### `getStoredKeys(biometricPrompt:accessGroup:)`
+
+Retrieves previously stored keys from the keychain. Additionally method expects optional `prompt` message for the keychain item stored behind a biometric factor. Use `accessGroup` to access shared keychain items between apps.
+> * Note: Similarly to `getData` function, iOS will show native Touch ID or Face ID message view in case of biometrics enabled storage. It means that function may be blocked and wait for the user's action. It is advised to call  `getStoredKeys` function in a background thread.
+
+```swift
+DispatchQueue.global().async {
+    do {
+        let keys = try oktaStorage.getStoredKeys()
     } catch let error {
         // Handle error
     }
