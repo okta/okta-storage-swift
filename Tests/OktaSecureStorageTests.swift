@@ -212,6 +212,13 @@ class OktaSecureStorageTests: XCTestCase {
 #endif
     }
 
+    func testMultipleSetAndGetStoredKeys() {
+        verifyMultipleSetAndGetStoredKeys(behindBiometrics: false)
+#if !targetEnvironment(simulator)
+        verifySetAndGetStoredKey(behindBiometrics: true)
+#endif
+    }
+    
     func testSetAndGetWithEmptyApplicationPassword() {
 #if targetEnvironment(simulator)
         return
@@ -388,6 +395,45 @@ class OktaSecureStorageTests: XCTestCase {
             XCTFail("Exception expected here")
         } catch let error as NSError {
             XCTAssert(error.code == errSecItemNotFound)
+        }
+    }
+    
+    private func verifyMultipleSetAndGetStoredKeys(behindBiometrics: Bool) {
+        XCTAssertThrowsError(try secureStorage.getStoredKeys(biometricPrompt: nil), "getStoredKeys() throws for no keys stored") { error in
+            XCTAssertEqual((error as NSError).code, -25300)
+        }
+
+        do {
+            try secureStorage.set(data: "someData1".data(using: .utf8)!, forKey: "account1", behindBiometrics: behindBiometrics)
+            try secureStorage.set(data: "someData2".data(using: .utf8)!, forKey: "account2", behindBiometrics: behindBiometrics)
+            try secureStorage.set(data: "someData3".data(using: .utf8)!, forKey: "anotherKey", behindBiometrics: behindBiometrics)
+            let result = try secureStorage.getStoredKeys(biometricPrompt: nil)
+            XCTAssertEqual(3, result.count)
+            XCTAssertTrue(result.contains("account1"))
+            XCTAssertTrue(result.contains("account2"))
+            XCTAssertTrue(result.contains("anotherKey"))
+        } catch let error {
+            XCTFail("Keychain operation failed - \(error)")
+        }
+
+        do {
+            try secureStorage.delete(key: "account2")
+            let result = try secureStorage.getStoredKeys(biometricPrompt: nil)
+            XCTAssertEqual(2, result.count)
+            XCTAssertTrue(result.contains("account1"))
+            XCTAssertTrue(result.contains("anotherKey"))
+        } catch let error {
+            XCTFail("Keychain operation failed - \(error)")
+        }
+
+        do {
+            try secureStorage.delete(key: "account1")
+            try secureStorage.delete(key: "anotherKey")
+        } catch let error {
+            XCTFail("Keychain operation failed - \(error)")
+        }
+        XCTAssertThrowsError(try secureStorage.getStoredKeys(biometricPrompt: nil), "getStoredKeys() should throw when no keys are stored") { error in
+            XCTAssertEqual((error as NSError).code, -25300)
         }
     }
 }

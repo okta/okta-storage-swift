@@ -198,7 +198,7 @@ open class OktaSecureStorage: NSObject {
 
         if let password = applicationPassword {
             let laContext = LAContext()
-            laContext.setCredential(password.data(using: .utf8), type: LACredentialType.applicationPassword)
+            laContext.setCredential(password.data(using: .utf8), type: .applicationPassword)
             query[kSecUseAuthenticationContext as String] = laContext
         }
         
@@ -210,6 +210,33 @@ open class OktaSecureStorage: NSObject {
         }
 
         return data
+    }
+
+    @objc open func getStoredKeys(biometricPrompt prompt: String? = nil, accessGroup: String? = nil) throws -> [String] {
+        var query = findQuery(accessGroup: accessGroup)
+        query[kSecReturnAttributes as String] = kCFBooleanTrue
+        query[kSecMatchLimit as String] = kSecMatchLimitAll
+        if let prompt = prompt {
+            query[kSecUseOperationPrompt as String] = prompt
+        }
+
+        if let password = applicationPassword {
+            let laContext = LAContext()
+            laContext.setCredential(password.data(using: .utf8), type: LACredentialType.applicationPassword)
+            query[kSecUseAuthenticationContext as String] = laContext
+        }
+        
+        var ref: AnyObject? = nil
+        let errorCode = SecItemCopyMatching(query as CFDictionary, &ref)
+        guard errorCode == noErr,
+            let results = ref as? [[AnyHashable: Any]]
+        else {
+            throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errorCode), userInfo: nil)
+        }
+        let keys = results
+            .compactMap { $0[kSecAttrAccount] as? String }
+
+        return keys
     }
 
     @objc open func delete(key: String) throws {
@@ -304,10 +331,11 @@ open class OktaSecureStorage: NSObject {
         return query
     }
     
-    private func findQuery(for key: String, accessGroup: String? = nil) -> Dictionary<String, Any> {
-
+    private func findQuery(for key: String? = nil, accessGroup: String? = nil) -> Dictionary<String, Any> {
         var query = baseQuery()
-        query[kSecAttrAccount as String] = key
+        if let key = key {
+            query[kSecAttrAccount as String] = key
+        }
         if let accessGroup = accessGroup {
             query[kSecAttrAccessGroup as String] = accessGroup
         }
