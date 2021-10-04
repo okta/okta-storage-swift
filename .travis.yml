@@ -10,15 +10,19 @@ jobs:
     - stage: Integration Tests
       name: iOS
       script:
-      - xcodebuild -project OktaSecureStorage.xcodeproj -scheme "OktaSecureStorage" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty
+      - set -o pipefail && xcodebuild -project OktaSecureStorage.xcodeproj -scheme "OktaSecureStorage" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty
     - stage: Build
       name: macOS
       script:
-      - xcodebuild -project OktaSecureStorage.xcodeproj -scheme "OktaSecureStorage-macOS" -destination "platform=macOS" build | xcpretty
+      - set -o pipefail && xcodebuild -project OktaSecureStorage.xcodeproj -scheme "OktaSecureStorage-macOS" -destination "platform=macOS" build | xcpretty
     - stage: Dependency Manager Validation
       name: CocoaPods
       script:
       - pod lib lint --allow-warnings
+    - stage: Dependency Manager Validation
+      name: SPM
+      script: 
+      - swift test
     # - stage: Dependency Manager Validation
     #   name: Carthage
     #   addons:
@@ -27,8 +31,4 @@ jobs:
     #       - carthage
     #       update: true
     #   script:
-    #   - carthage build --use-xcframeworks --no-skip-current
-    - stage: Dependency Manager Validation
-      name: SPM
-      script: 
-      - swift test
+    #   - carthage build --use-xcframeworks --no-skip-current      
