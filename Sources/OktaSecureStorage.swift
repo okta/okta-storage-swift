@@ -198,7 +198,6 @@ open class OktaSecureStorage: NSObject {
         }
 
         if let password = applicationPassword {
-            let laContext = LAContext()
             laContext.setCredential(password.data(using: .utf8), type: .applicationPassword)
             query[kSecUseAuthenticationContext as String] = laContext
         }
@@ -222,7 +221,6 @@ open class OktaSecureStorage: NSObject {
         }
 
         if let password = applicationPassword {
-            let laContext = LAContext()
             laContext.setCredential(password.data(using: .utf8), type: LACredentialType.applicationPassword)
         }
         
@@ -264,7 +262,6 @@ open class OktaSecureStorage: NSObject {
 
     @objc open func isTouchIDSupported() -> Bool  {
         
-        let laContext = LAContext()
         var touchIdSupported = false
         if #available(iOS 11.0, *) {
             let touchIdEnrolled = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
