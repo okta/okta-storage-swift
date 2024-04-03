@@ -159,6 +159,7 @@ open class OktaSecureStorage: NSObject {
             let searchQuery = findQuery(for: key, accessGroup: accessGroup)
             query.removeValue(forKey: kSecClass as String)
             query.removeValue(forKey: kSecAttrService as String)
+            query.removeValue(forKey: kSecUseAuthenticationContext as String)
             if #available(macOS 10.15, iOS 13.0, *) {
                 query.removeValue(forKey: kSecUseDataProtectionKeychain as String)
             }
