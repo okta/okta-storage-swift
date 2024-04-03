@@ -22,6 +22,7 @@ open class OktaSecureStorage: NSObject {
     static let keychainErrorDomain = "com.okta.securestorage"
 
     let applicationPassword: String?
+    let laContext = LAContext()
 
     @objc public init(applicationPassword password: String? = nil) {
         applicationPassword = password
@@ -127,7 +128,6 @@ open class OktaSecureStorage: NSObject {
             var applicationPasswordFlag = SecAccessControlCreateFlags()
             if applicationPasswordSet {
                 applicationPasswordFlag.insert(SecAccessControlCreateFlags.applicationPassword)
-                let laContext = LAContext()
                 guard let passwordData = applicationPassword?.data(using: .utf8) else {
                     throw NSError(domain: OktaSecureStorage.keychainErrorDomain, code: Int(errSecParam), userInfo: nil)
                 }
@@ -223,7 +223,6 @@ open class OktaSecureStorage: NSObject {
         if let password = applicationPassword {
             let laContext = LAContext()
             laContext.setCredential(password.data(using: .utf8), type: LACredentialType.applicationPassword)
-            query[kSecUseAuthenticationContext as String] = laContext
         }
         
         var ref: AnyObject? = nil
@@ -324,7 +323,9 @@ open class OktaSecureStorage: NSObject {
     private func baseQuery() -> Dictionary<String, Any> {
         var query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword as String,
-            kSecAttrService as String: "OktaSecureStorage"]
+            kSecAttrService as String: "OktaSecureStorage",
+            kSecUseAuthenticationContext as String: laContext,
+        ]
         if #available(macOS 10.15, iOS 13.0, *) {
             query[kSecUseDataProtectionKeychain as String] = kCFBooleanTrue
         }
