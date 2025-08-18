@@ -35,13 +35,6 @@ jobs:
           os: macos
 
 workflows:
-  semgrep:
-    jobs:
-      - general-platform-helpers/job-semgrep-scan:
-          name: semgrep-scan
-          context:
-            - static-analysis
-
   security-scan:
     jobs:
       - setup:
