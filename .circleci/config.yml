@@ -41,18 +41,8 @@ workflows:
   security-scan:
     jobs:
       - setup:
-          filters:
-            branches:
-              only:
-                - master
-                - fix-broken-scans
       - snyk-scan:
           name: execute-snyk
-          filters:
-            branches:
-              only:
-                - master
-                - fix-broken-scans
           context:
             - static-analysis
           requires:
