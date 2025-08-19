@@ -40,7 +40,10 @@ jobs:
 workflows:
   security-scan:
     jobs:
+      - setup
       - snyk-scan:
           name: execute-snyk
           context:
             - static-analysis
+          requires:
+            - setup
