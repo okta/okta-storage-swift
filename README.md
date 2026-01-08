@@ -1,3 +1,17 @@
+The functionality from this project has been replaced in the `okta-mobile-swift` repository, which is designed as a monorepo to represent the unified Okta Client SDK for Swift.
+
+## New Location
+
+All future development, issues, and pull requests should be directed to the new monorepo, which can be found here:
+
+:arrow_right: **[https://github.com/okta/okta-mobile-swift](https://github.com/okta/okta-mobile-swift)**
+
+This modern SDK natively supports the storage of tokens using the [Credential](https://okta.github.io/okta-mobile-swift/development/documentation/authfoundation/credential) class. Various keychain security options, including access groups, and biometrics, are supported.
+
+Okta documentation describes usage patterns in storing, retrieving, removing, and querying the sets of user tokens in the keychain. See [Managing User Credentials](https://okta.github.io/okta-mobile-swift/development/documentation/authfoundation/managingusercredentials).
+
+General-purpose access to the keychain is provided by using a new [Keychain](https://okta.github.io/okta-mobile-swift/development/documentation/authfoundation/keychain) struct, which provides more expressive access to interacting with the system keychain.
+
 [<img src="https://aws1.discourse-cdn.com/standard14/uploads/oktadev/original/1X/0c6402653dfb70edc661d4976a43a46f33e5e919.png" align="right" width="256px"/>](https://devforum.okta.com/)
 [![Version](https://img.shields.io/cocoapods/v/OktaStorage.svg?style=flat)](http://cocoapods.org/pods/OktaStorage)
 [![Carthage](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat-square)](https://github.com/Carthage/Carthage)
