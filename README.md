@@ -1,3 +1,7 @@
+# :stop_sign: This Repository is Deprecated :stop_sign:
+
+**This repository (`okta-storage-swift`) is no longer actively maintained.**
+
 The functionality from this project has been replaced in the `okta-mobile-swift` repository, which is designed as a monorepo to represent the unified Okta Client SDK for Swift.
 
 ## New Location
